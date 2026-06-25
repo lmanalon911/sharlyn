@@ -13,7 +13,7 @@ function InvitationContent() {
   const handleOpen = () => {
     setOpening(true);
     setTimeout(() => {
-      router.push("/storybook");
+      router.push("/the-days-before-me");
     }, 1200);
   };
 
