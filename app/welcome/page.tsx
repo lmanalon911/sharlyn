@@ -17,34 +17,34 @@ function SpeechBubble({ text, side }: { text: string; side: "left" | "right" }) 
   return (
     <AnimatePresence>
       <motion.div
-        initial={{ opacity: 0, y: 10, scale: 0.9 }}
-        animate={{ opacity: 1, y: 0, scale: 1 }}
-        exit={{ opacity: 0, y: 10, scale: 0.9 }}
+        initial={{ opacity: 0, x: side === "left" ? 10 : -10, scale: 0.9 }}
+        animate={{ opacity: 1, x: 0, scale: 1 }}
+        exit={{ opacity: 0, scale: 0.9 }}
         transition={{ duration: 0.25 }}
-        className="absolute z-20 w-52 rounded-2xl px-4 py-3 shadow-lg text-sm font-body leading-snug"
+        className="absolute z-20 w-44 rounded-2xl px-4 py-3 shadow-lg text-sm font-body leading-snug"
         style={{
           background: "rgba(255,255,255,0.92)",
           color: "#5C3D2E",
           border: "1.5px solid #F7C5CC",
-          bottom: "calc(100% + 14px)",
-          left: side === "left" ? "50%" : "auto",
-          right: side === "right" ? "50%" : "auto",
-          transform: side === "left" ? "translateX(-30%)" : "translateX(30%)",
+          top: "20%",
+          left: side === "left" ? "calc(100% + 14px)" : "auto",
+          right: side === "right" ? "calc(100% + 14px)" : "auto",
         }}
       >
         {text}
-        {/* Tail */}
+        {/* Tail pointing toward the character */}
         <span
           style={{
             position: "absolute",
-            bottom: -9,
-            left: side === "left" ? "28%" : "auto",
-            right: side === "right" ? "28%" : "auto",
+            top: 16,
+            left: side === "left" ? -9 : "auto",
+            right: side === "right" ? -9 : "auto",
             width: 0,
             height: 0,
-            borderLeft: "9px solid transparent",
-            borderRight: "9px solid transparent",
-            borderTop: "9px solid rgba(255,255,255,0.92)",
+            borderTop: "9px solid transparent",
+            borderBottom: "9px solid transparent",
+            borderRight: side === "left" ? "9px solid rgba(255,255,255,0.92)" : "none",
+            borderLeft: side === "right" ? "9px solid rgba(255,255,255,0.92)" : "none",
           }}
         />
       </motion.div>
