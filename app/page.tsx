@@ -62,26 +62,6 @@ export default function PasswordPage() {
         </motion.div>
 
         <div className="glass rounded-3xl p-10 shadow-2xl text-center">
-          <motion.h1
-            className="font-display text-4xl mb-2"
-            style={{ color: "#B76E79" }}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.3 }}
-          >
-            The Days Before Me
-          </motion.h1>
-
-          <motion.p
-            className="font-body text-sm mb-8 tracking-widest uppercase"
-            style={{ color: "#B76E7999" }}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.5 }}
-          >
-            A story for you, Mommy
-          </motion.p>
-
           <motion.p
             className="font-body text-lg mb-8 italic"
             style={{ color: "#8B3A52cc" }}
@@ -137,13 +117,13 @@ export default function PasswordPage() {
               className="w-full py-4 rounded-2xl font-body font-semibold text-lg tracking-wide shadow-lg disabled:opacity-40 transition-all duration-300"
               style={{ background: "#B76E79", color: "#FFFDF9" }}
             >
-              {loading ? "Opening… ✨" : "Open ✦"}
+              {loading ? "Opening… ✨" : "Open Your Birthday Gift 🎁"}
             </motion.button>
           </form>
         </div>
 
         <p className="text-center text-xs mt-6 font-body" style={{ color: "#F7C5CC80" }}>
-          Made with love by Daddy & Sofiel 💕
+          Made with love by Lemuel & Sofiel 💕
         </p>
       </motion.div>
     </div>
