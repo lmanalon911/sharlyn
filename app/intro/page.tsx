@@ -97,7 +97,7 @@ function fmt(s: number) {
   return `${m}:${sec.toString().padStart(2, "0")}`;
 }
 
-const kenVariants: Record<string, { initial: object; animate: object }> = {
+const kenVariants: Record<string, { initial: Record<string, number>; animate: Record<string, number> }> = {
   zoom:  { initial: { scale: 1.12 }, animate: { scale: 1.0 } },
   left:  { initial: { scale: 1.08, x: 30 }, animate: { scale: 1.0, x: 0 } },
   right: { initial: { scale: 1.08, x: -30 }, animate: { scale: 1.0, x: 0 } },
