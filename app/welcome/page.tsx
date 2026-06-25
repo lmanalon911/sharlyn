@@ -1,12 +1,13 @@
 "use client";
 
-import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import ParticleField from "@/components/ParticleField";
 import AuthGuard from "@/components/AuthGuard";
 
-function CharacterPlaceholder({ label, delay, side }: { label: string; delay: number; side: "left" | "right" }) {
+const CUTOUT_URL = "https://ayvgxtdwylgpsjkpiulc.supabase.co/storage/v1/object/public/Media/ChatGPT%20Image%20Jun%2024,%202026,%2009_33_52%20PM.png";
+
+function Character({ label, delay, side }: { label: string; delay: number; side: "left" | "right" }) {
   return (
     <motion.div
       initial={{ opacity: 0, x: side === "left" ? -80 : 80, y: 20 }}
@@ -19,20 +20,31 @@ function CharacterPlaceholder({ label, delay, side }: { label: string; delay: nu
         transition={{ repeat: Infinity, duration: 3, ease: "easeInOut", delay: delay * 0.5 }}
         className="relative"
       >
-        {/* Character silhouette placeholder */}
         <div
-          className="w-36 h-52 md:w-44 md:h-64 rounded-3xl flex items-end justify-center overflow-hidden shadow-xl"
-          style={{ background: "linear-gradient(135deg, #F7C5CC, #C9B8D8)" }}
+          className="w-40 h-56 md:w-52 md:h-72 overflow-hidden relative"
+          style={{ background: "transparent" }}
         >
-          <div className="text-center pb-4 px-2">
-            <div className="text-5xl mb-1">{side === "left" ? "👨" : "👧"}</div>
-          </div>
+          <img
+            src={CUTOUT_URL}
+            alt={label}
+            style={{
+              position: "absolute",
+              top: 0,
+              height: "100%",
+              width: "auto",
+              maxWidth: "none",
+              // Daddy is left half, Sofiel is right half of the image
+              left: side === "left" ? "0%" : "auto",
+              right: side === "right" ? "0%" : "auto",
+              objectFit: "cover",
+              objectPosition: side === "left" ? "left center" : "right center",
+            }}
+          />
         </div>
-        {/* Sparkle overlay */}
         <motion.div
           className="absolute -top-2 -right-2 text-xl"
           animate={{ scale: [0.8, 1.2, 0.8], opacity: [0.5, 1, 0.5] }}
-          transition={{ repeat: Infinity, duration: 2, delay: delay }}
+          transition={{ repeat: Infinity, duration: 2, delay }}
         >
           ✨
         </motion.div>
@@ -49,13 +61,11 @@ function WelcomeContent() {
     <div className="relative min-h-screen fairytale-bg flex flex-col items-center justify-center overflow-hidden">
       <ParticleField count={60} />
 
-      {/* Glow blobs */}
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[300px] rounded-full opacity-30 blur-3xl" style={{ background: "#F7C5CC" }} />
       <div className="absolute bottom-0 left-0 w-[250px] h-[250px] rounded-full opacity-20 blur-3xl" style={{ background: "#C9B8D8" }} />
       <div className="absolute bottom-0 right-0 w-[250px] h-[250px] rounded-full opacity-20 blur-3xl" style={{ background: "#FFBE88" }} />
 
       <div className="relative z-10 flex flex-col items-center gap-8 px-6 text-center max-w-3xl">
-        {/* Title */}
         <motion.div
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -67,23 +77,21 @@ function WelcomeContent() {
             animate={{ scale: [1, 1.03, 1] }}
             transition={{ repeat: Infinity, duration: 4, ease: "easeInOut" }}
           >
-            Hi Mommy! 💕
+            Hi Mommy!
           </motion.h1>
           <p className="font-body text-lg md:text-xl" style={{ color: "#8B3A5299" }}>
             We made something just for you…
           </p>
         </motion.div>
 
-        {/* Characters */}
-        <div className="flex items-end gap-8 md:gap-16 mt-4">
-          <CharacterPlaceholder label="Daddy" delay={0.4} side="left" />
+        <div className="flex items-end gap-4 md:gap-12 mt-4">
+          <Character label="Daddy" delay={0.4} side="left" />
 
-          {/* Center heart */}
           <motion.div
             initial={{ opacity: 0, scale: 0 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ delay: 0.8, type: "spring", stiffness: 200 }}
-            className="flex flex-col items-center gap-2 pb-8"
+            className="flex flex-col items-center gap-2 pb-12"
           >
             <motion.div
               className="text-5xl"
@@ -94,10 +102,9 @@ function WelcomeContent() {
             </motion.div>
           </motion.div>
 
-          <CharacterPlaceholder label="Sofiel" delay={0.6} side="right" />
+          <Character label="Sofiel" delay={0.6} side="right" />
         </div>
 
-        {/* Button */}
         <motion.button
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -111,7 +118,6 @@ function WelcomeContent() {
           Begin Our Story ✦
         </motion.button>
 
-        {/* Decorative dots */}
         <motion.div
           className="flex gap-2 mt-2"
           initial={{ opacity: 0 }}
