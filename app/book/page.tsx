@@ -56,12 +56,17 @@ function InvitationContent() {
           </motion.div>
         </motion.div>
 
-        {/* Speech bubble */}
-        <motion.div
+        {/* Speech bubble as button */}
+        <motion.button
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.5 }}
-          className="glass rounded-3xl rounded-tl-sm p-6 shadow-xl mb-6 relative"
+          whileHover={{ scale: 1.04 }}
+          whileTap={{ scale: 0.96 }}
+          onClick={handleOpen}
+          disabled={opening}
+          className="glass rounded-3xl rounded-tl-sm p-6 shadow-xl mb-6 relative w-full text-center cursor-pointer"
+          style={{ border: opening ? "1.5px solid #B76E7960" : "1.5px solid rgba(247,197,204,0.3)" }}
         >
           <div
             className="absolute -top-3 left-8 w-0 h-0"
@@ -72,34 +77,22 @@ function InvitationContent() {
             }}
           />
           <p className="font-display text-2xl mb-1" style={{ color: "#8B3A52" }}>
-            &ldquo;Read tayo book?&rdquo;
+            {opening ? "Opening the book… 📖✨" : "“Read tayo book?”"}
           </p>
           <p className="font-body text-sm" style={{ color: "#B76E79" }}>
             — Sofiel 🌸
           </p>
-        </motion.div>
+        </motion.button>
 
-        <motion.div
+        <motion.p
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.9 }}
-          className="space-y-3"
+          className="font-body italic text-sm"
+          style={{ color: "#5C3D2E99" }}
         >
-          <p className="font-body italic text-sm" style={{ color: "#5C3D2E99" }}>
-            Daddy told me all about this story.
-          </p>
-
-          <motion.button
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            onClick={handleOpen}
-            disabled={opening}
-            className="w-full py-4 rounded-2xl font-body font-semibold text-lg shadow-xl transition-all"
-            style={{ background: "#B76E79", color: "#FFFDF9" }}
-          >
-            {opening ? "Opening the book… 📖✨" : "Read the Book 📖"}
-          </motion.button>
-        </motion.div>
+          Daddy told me all about this story.
+        </motion.p>
       </motion.div>
     </motion.div>
   );
