@@ -150,7 +150,6 @@ function StorybookContent() {
                   transformOrigin: flipDir === 1 ? "left center" : "right center",
                   transformStyle:  "preserve-3d",
                   animation:       `pageFlip${flipDir === 1 ? "Forward" : "Backward"} 0.7s cubic-bezier(0.645,0.045,0.355,1.000) forwards`,
-                  borderRadius:    flipDir === 1 ? "0 1.5rem 1.5rem 0" : "1.5rem 0 0 1.5rem",
                 }}
               >
                 {/* Front face */}
@@ -168,6 +167,14 @@ function StorybookContent() {
                     corner={flipDir === 1 ? "tr" : "tl"}
                   />
                 </div>
+                {/* Curl shadow overlay on front face */}
+                <div
+                  className="absolute inset-0 pointer-events-none z-10"
+                  style={{
+                    animation: `pageFlipShadow${flipDir === 1 ? "Forward" : "Backward"} 0.7s cubic-bezier(0.645,0.045,0.355,1.000) forwards`,
+                    borderRadius: "inherit",
+                  }}
+                />
                 {/* Back face */}
                 <div
                   className="absolute inset-0 paper-texture p-6 md:p-8"
