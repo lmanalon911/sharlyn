@@ -41,7 +41,7 @@ function InvitationContent() {
           <img
             src="https://ayvgxtdwylgpsjkpiulc.supabase.co/storage/v1/object/public/Media/ChatGPT%20Image%20Jun%2025,%202026,%2002_15_41%20AM.png"
             alt="Sofiel"
-            className="w-80 mx-auto"
+            className="w-80 mx-auto -mb-12"
           />
           <motion.div
             className="absolute -top-1 left-1/2 -translate-x-1/2 text-2xl"
