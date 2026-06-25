@@ -1,0 +1,118 @@
+@import "tailwindcss";
+
+@theme {
+  --color-blush: #F7C5CC;
+  --color-cream: #FDF6EC;
+  --color-warm-white: #FFFDF9;
+  --color-rose-gold: #B76E79;
+  --color-lavender: #C9B8D8;
+  --color-peach: #FFBE88;
+  --color-parchment: #F5EDD8;
+  --color-deep-rose: #8B3A52;
+
+  --font-display: 'Playfair Display', serif;
+  --font-body: 'Nunito', sans-serif;
+}
+
+:root {
+  --background: #FFFDF9;
+  --foreground: #5C3D2E;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-body);
+  overflow-x: hidden;
+}
+
+.font-display {
+  font-family: var(--font-display);
+}
+
+.font-body {
+  font-family: var(--font-body);
+}
+
+/* Sparkle keyframes */
+@keyframes float {
+  0%, 100% { transform: translateY(0px) rotate(0deg); opacity: 0.8; }
+  50% { transform: translateY(-20px) rotate(180deg); opacity: 1; }
+}
+
+@keyframes sparkle {
+  0%, 100% { transform: scale(0) rotate(0deg); opacity: 0; }
+  50% { transform: scale(1) rotate(180deg); opacity: 1; }
+}
+
+@keyframes shimmer {
+  0% { background-position: -200% center; }
+  100% { background-position: 200% center; }
+}
+
+@keyframes glow {
+  0%, 100% { box-shadow: 0 0 20px rgba(183, 110, 121, 0.3); }
+  50% { box-shadow: 0 0 40px rgba(183, 110, 121, 0.6), 0 0 60px rgba(247, 197, 204, 0.3); }
+}
+
+@keyframes heartbeat {
+  0%, 100% { transform: scale(1); }
+  25% { transform: scale(1.1); }
+  50% { transform: scale(1); }
+  75% { transform: scale(1.05); }
+}
+
+/* Book page flip */
+.book-page {
+  transform-origin: left center;
+  transform-style: preserve-3d;
+  backface-visibility: hidden;
+}
+
+.perspective-1000 {
+  perspective: 1000px;
+}
+
+/* Glassmorphism */
+.glass {
+  background: rgba(255, 253, 249, 0.6);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(247, 197, 204, 0.3);
+}
+
+/* Gradient text */
+.gradient-text {
+  background: linear-gradient(135deg, #B76E79, #8B3A52, #C9B8D8);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Fairy dust gradient background */
+.fairytale-bg {
+  background: linear-gradient(135deg, #FFFDF9 0%, #FDF6EC 30%, #F7C5CC20 60%, #C9B8D820 100%);
+}
+
+/* Storybook paper texture */
+.paper-texture {
+  background-color: #FDF6EC;
+  background-image:
+    repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 27px,
+      rgba(183, 110, 121, 0.05) 27px,
+      rgba(183, 110, 121, 0.05) 28px
+    );
+}
