@@ -162,7 +162,7 @@ function WelcomeContent() {
           transition={{ delay: 1.2 }}
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
-          onClick={() => router.push("/intro")}
+          onClick={() => router.push("/more-like-you")}
           className="mt-4 px-10 py-4 rounded-full font-body font-semibold text-lg tracking-wide shadow-xl transition-all"
           style={{ background: "#B76E79", color: "#FFFDF9" }}
         >

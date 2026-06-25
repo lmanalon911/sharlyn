@@ -169,7 +169,7 @@ function IntroContent() {
         src={AUDIO_URL}
         onTimeUpdate={(e) => setCurrentTime(e.currentTarget.currentTime)}
         onLoadedMetadata={(e) => setDuration(e.currentTarget.duration)}
-        onEnded={() => { setIsPlaying(false); setTimeout(() => router.push("/invitation"), 2500); }}
+        onEnded={() => { setIsPlaying(false); setTimeout(() => router.push("/book"), 2500); }}
       />
 
       {/* Song title */}
@@ -180,7 +180,7 @@ function IntroContent() {
       {/* Skip */}
       <motion.button
         initial={{ opacity: 0 }} animate={{ opacity: 0.4 }} whileHover={{ opacity: 1 }}
-        onClick={() => router.push("/invitation")}
+        onClick={() => router.push("/book")}
         className="absolute top-4 right-5 z-20 text-white text-sm font-body"
       >
         Skip →
