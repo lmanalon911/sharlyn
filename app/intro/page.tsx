@@ -282,8 +282,8 @@ function IntroContent() {
           <motion.div initial={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.7 }}
             className="absolute inset-0 flex flex-col items-center justify-center z-30 bg-black/70">
             <motion.div className="text-center" animate={{ scale: [1, 1.03, 1] }} transition={{ repeat: Infinity, duration: 2.5 }}>
-              <p className="font-display text-white/85 text-3xl mb-2">A song for you, Mommy</p>
-              <p className="font-body text-white/45 text-sm mb-10 italic">tap to play</p>
+              <p className="font-display text-white/90 text-4xl mb-3">More Like You</p>
+              <p className="font-body text-white/55 text-sm mb-10 italic max-w-xs mx-auto leading-relaxed">You may not always believe it, but I've always seen you as your best self all along.</p>
               <button onClick={togglePlay}
                 className="w-20 h-20 rounded-full flex items-center justify-center shadow-2xl border-2 border-white/40 mx-auto active:scale-95 transition-transform"
                 style={{ background: "rgba(183,110,121,0.85)" }}>
