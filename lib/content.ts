@@ -39,15 +39,9 @@ export const introSlides: IntroSlide[] = [
   },
 ];
 
-export const storybookSpreads: StorybookSpread[] = [
-  { id: 1  },
-  { id: 2  },
-  { id: 3  },
-  { id: 4  },
-  { id: 5  },
-  { id: 6  },
-  { id: 7  },
-  { id: 8  },
-  { id: 9  },
-  { id: 10 },
-];
+const BASE = "https://ayvgxtdwylgpsjkpiulc.supabase.co/storage/v1/object/public/Media";
+
+export const storybookSpreads: StorybookSpread[] = Array.from({ length: 15 }, (_, i) => ({
+  id: i + 1,
+  spreadImage: `${BASE}/${i + 1}.png`,
+}));
