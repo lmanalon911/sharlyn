@@ -97,7 +97,8 @@ function fmt(s: number) {
   return `${m}:${sec.toString().padStart(2, "0")}`;
 }
 
-const kenVariants: Record<string, { initial: Record<string, number>; animate: Record<string, number> }> = {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const kenVariants: Record<string, { initial: any; animate: any }> = {
   zoom:  { initial: { scale: 1.12 }, animate: { scale: 1.0 } },
   left:  { initial: { scale: 1.08, x: 30 }, animate: { scale: 1.0, x: 0 } },
   right: { initial: { scale: 1.08, x: -30 }, animate: { scale: 1.0, x: 0 } },
