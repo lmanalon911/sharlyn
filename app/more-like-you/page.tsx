@@ -113,7 +113,7 @@ function KenBurnsPhoto({ src, kenKey }: { src: string; kenKey: string }) {
   const anims = ["ken-zoom", "ken-left", "ken-right", "ken-zoom-out"];
   const anim = anims[Math.abs(kenKey.charCodeAt(0) + kenKey.charCodeAt(4)) % anims.length];
   return (
-    <div className="w-full h-full overflow-hidden rounded-2xl shadow-xl flex items-center justify-center bg-black/20">
+    <div className="w-full h-full overflow-hidden rounded-2xl flex items-center justify-center" style={{ boxShadow: "0 8px 32px rgba(92,61,46,0.18)" }}>
       <img
         src={src}
         alt=""
@@ -187,15 +187,15 @@ function IntroContent() {
       />
 
       {/* Song title */}
-      <p className="relative z-10 text-center font-display text-white/40 text-xs tracking-widest uppercase pt-5 pb-1">
+      <p className="relative z-10 text-center font-display text-xs tracking-widest uppercase pt-5 pb-1" style={{ color: "#B76E7980" }}>
         More Like You
       </p>
 
       {/* Skip */}
       <motion.button
-        initial={{ opacity: 0 }} animate={{ opacity: 0.4 }} whileHover={{ opacity: 1 }}
+        initial={{ opacity: 0 }} animate={{ opacity: 0.5 }} whileHover={{ opacity: 1 }}
         onClick={() => navigateNext()}
-        className="absolute top-4 right-5 z-20 text-white text-sm font-body"
+        className="absolute top-4 right-5 z-20 text-sm font-body" style={{ color: "#8B3A52" }}
       >
         Skip →
       </motion.button>
@@ -232,8 +232,8 @@ function IntroContent() {
       <div className="relative z-10 flex flex-col items-center gap-1 px-8 py-3 text-center" style={{ minHeight: 96 }}>
         <AnimatePresence mode="wait">
           {prevLyric?.text ? (
-            <motion.p key={`p${lyricIdx}`} initial={{ opacity: 0 }} animate={{ opacity: 0.3 }} exit={{ opacity: 0 }}
-              transition={{ duration: 0.3 }} className="font-display text-white text-xs md:text-sm">
+            <motion.p key={`p${lyricIdx}`} initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+              transition={{ duration: 0.3 }} className="font-display text-xs md:text-sm" style={{ color: "#B76E7960" }}>
               {prevLyric.text}
             </motion.p>
           ) : <div key={`pe${lyricIdx}`} className="h-4" />}
@@ -244,8 +244,8 @@ function IntroContent() {
             key={`c${lyricIdx}`}
             initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
             transition={{ duration: 0.3 }}
-            className="font-display text-white text-xl md:text-3xl font-medium"
-            style={{ textShadow: "0 2px 20px rgba(247,197,204,0.8)" }}
+            className="font-display text-xl md:text-3xl font-medium"
+            style={{ color: "#8B3A52", textShadow: "0 1px 12px rgba(247,197,204,0.5)" }}
           >
             {curLyric.text}
           </motion.p>
@@ -253,8 +253,8 @@ function IntroContent() {
 
         <AnimatePresence mode="wait">
           {nextLyric?.text && curLyric.text ? (
-            <motion.p key={`n${lyricIdx}`} initial={{ opacity: 0 }} animate={{ opacity: 0.18 }} exit={{ opacity: 0 }}
-              transition={{ duration: 0.3 }} className="font-display text-white text-xs md:text-sm">
+            <motion.p key={`n${lyricIdx}`} initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+              transition={{ duration: 0.3 }} className="font-display text-xs md:text-sm" style={{ color: "#B76E7940" }}>
               {nextLyric.text}
             </motion.p>
           ) : <div key={`ne${lyricIdx}`} className="h-4" />}
@@ -265,7 +265,7 @@ function IntroContent() {
       <div className="relative z-10 px-6 pb-6 pt-1">
         <div className="max-w-lg mx-auto flex flex-col gap-3">
           <div className="flex items-center gap-3">
-            <span className="text-white/40 text-xs font-body w-10 text-right tabular-nums">{fmt(currentTime)}</span>
+            <span className="text-xs font-body w-10 text-right tabular-nums" style={{ color: "#B76E7980" }}>{fmt(currentTime)}</span>
             <input
               type="range"
               min={0}
@@ -275,11 +275,11 @@ function IntroContent() {
               onChange={handleSeek}
               className="flex-1 h-1 cursor-pointer rounded-full outline-none appearance-none"
               style={{
-                background: `linear-gradient(to right, #B76E79 ${progress}%, rgba(255,255,255,0.2) ${progress}%)`,
+                background: `linear-gradient(to right, #B76E79 ${progress}%, rgba(183,110,121,0.15) ${progress}%)`,
                 accentColor: "#B76E79",
               }}
             />
-            <span className="text-white/40 text-xs font-body w-10 tabular-nums">{fmt(duration)}</span>
+            <span className="text-xs font-body w-10 tabular-nums" style={{ color: "#B76E7980" }}>{fmt(duration)}</span>
           </div>
           <div className="flex justify-center">
             <button onClick={togglePlay}
