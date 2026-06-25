@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import AuthGuard from "@/components/AuthGuard";
@@ -49,6 +49,16 @@ const PAGE_EDGES = "repeating-linear-gradient(to bottom, #f0e4ca 0px, #f0e4ca 2p
 
 function StorybookContent() {
   const router = useRouter();
+  // Preload all spread images on mount so flips never wait for network
+  useEffect(() => {
+    storybookSpreads.forEach((s) => {
+      if (s.spreadImage) {
+        const img = new Image();
+        img.src = s.spreadImage;
+      }
+    });
+  }, []);
+
   const [current, setCurrent] = useState(0);
   const [flipping, setFlipping] = useState(false);
   const [flipDir, setFlipDir] = useState<1 | -1>(1);
