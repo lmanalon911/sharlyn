@@ -10,7 +10,8 @@ const TOTAL = storybookSpreads.length;
 
 type PageData = { type: "image" | "text"; text?: string; caption?: string };
 
-function PageContent({ page, pageNum, corner }: { page: PageData; pageNum: number; corner: "tl" | "tr" }) {
+// Renders a single page's text/caption content (no background — that's handled by the parent)
+function PageText({ page, pageNum, corner }: { page: PageData; pageNum: number; corner: "tl" | "tr" }) {
   return (
     <div className="h-full w-full flex flex-col">
       <div className={`text-xs mb-3 font-body ${corner === "tr" ? "text-right" : ""}`} style={{ color: "#B76E7950" }}>
@@ -18,6 +19,7 @@ function PageContent({ page, pageNum, corner }: { page: PageData; pageNum: numbe
       </div>
       <div className="flex-1">
         {page.type === "image" ? (
+          // Single-page image placeholder (used when no spreadImage)
           <div className="h-full w-full rounded-2xl flex items-center justify-center p-4" style={{ background: "linear-gradient(135deg, #F7C5CC40, #C9B8D840)" }}>
             <div className="text-center">
               <div className="text-6xl mb-3">🖼️</div>
@@ -39,6 +41,22 @@ function PageContent({ page, pageNum, corner }: { page: PageData; pageNum: numbe
       <div className={`text-xl mt-2 ${corner === "tr" ? "text-right" : ""}`} style={{ color: "#F7C5CC80" }}>✦</div>
     </div>
   );
+}
+
+// Returns the background style for a page half when a spread image is present
+// side "left"  → background-position 0% (left half of image)
+// side "right" → background-position 100% (right half of image)
+// mirrorForBackFace: back face has rotateY(180deg) so left↔right swap — use 100% for both halves
+function spreadBg(imageUrl: string, side: "left" | "right", mirrorForBackFace = false): React.CSSProperties {
+  const pos = mirrorForBackFace
+    ? "100% 50%"                          // always use right half in DOM so it appears as left half visually
+    : side === "left" ? "0% 50%" : "100% 50%";
+  return {
+    backgroundImage: `url(${imageUrl})`,
+    backgroundSize: "200% 100%",
+    backgroundPosition: pos,
+    backgroundRepeat: "no-repeat",
+  };
 }
 
 function StorybookContent() {
@@ -67,10 +85,13 @@ function StorybookContent() {
   const nxt = storybookSpreads[next] ?? cur;
 
   // Back layer: what gets revealed under the flipping page
-  // Forward: left stays as cur.left, right reveals nxt.right
-  // Backward: left reveals nxt.left, right stays as cur.right
-  const backLeft  = flipping && flipDir === -1 ? nxt.leftPage  : cur.leftPage;
-  const backRight = flipping && flipDir ===  1 ? nxt.rightPage : cur.rightPage;
+  const backSpread    = flipDir === 1 ? { left: cur,  right: nxt  } : { left: nxt,  right: cur  };
+  const backLeftNum   = (flipDir === 1 || !flipping ? current : next) * 2 + 1;
+  const backRightNum  = (flipDir === 1 && flipping  ? next    : current) * 2 + 2;
+
+  // Which spread's image to use for back layer halves
+  const backLeftImage  = flipping ? backSpread.left.spreadImage  : cur.spreadImage;
+  const backRightImage = flipping ? backSpread.right.spreadImage : cur.spreadImage;
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center px-4 py-8 relative overflow-hidden" style={{ background: "linear-gradient(160deg, #FDF6EC, #F5EDD8)" }}>
@@ -85,47 +106,88 @@ function StorybookContent() {
         <div className="relative w-full rounded-3xl shadow-2xl flex" style={{ minHeight: "420px", background: "#FDF6EC" }}>
 
           {/* Spine */}
-          <div className="absolute left-1/2 -translate-x-1/2 top-0 bottom-0 w-6 z-20 pointer-events-none" style={{ background: "linear-gradient(to right, #5C3D2E30, #B76E7960, #5C3D2E30)" }} />
+          <div className="absolute left-1/2 -translate-x-1/2 top-0 bottom-0 w-6 z-20 pointer-events-none rounded-sm" style={{ background: "linear-gradient(to right, #5C3D2E30, #B76E7960, #5C3D2E30)" }} />
 
-          {/* Back layer — always visible, revealed as the page lifts */}
-          <div className="flex-1 paper-texture p-6 md:p-8 rounded-l-3xl border-r-2" style={{ borderColor: "#B76E7920" }}>
-            <PageContent page={backLeft} pageNum={(flipping && flipDir === -1 ? next : current) * 2 + 1} corner="tl" />
-          </div>
-          <div className="flex-1 paper-texture p-6 md:p-8 rounded-r-3xl">
-            <PageContent page={backRight} pageNum={(flipping && flipDir === 1 ? next : current) * 2 + 2} corner="tr" />
+          {/* ── Back layer: left page ── */}
+          <div
+            className="flex-1 paper-texture p-6 md:p-8 rounded-l-3xl border-r-2 overflow-hidden"
+            style={{ borderColor: "#B76E7920", ...(backLeftImage ? spreadBg(backLeftImage, "left") : {}) }}
+          >
+            <PageText
+              page={flipping ? backSpread.left.leftPage : cur.leftPage}
+              pageNum={backLeftNum}
+              corner="tl"
+            />
           </div>
 
-          {/* Flipping page */}
-          {flipping && (
-            <div
-              className="absolute top-0 bottom-0 z-30"
-              style={{
-                left:            flipDir === 1 ? "50%" : "0",
-                right:           flipDir === 1 ? "0"   : "50%",
-                transformOrigin: flipDir === 1 ? "left center" : "right center",
-                transformStyle:  "preserve-3d",
-                animation:       `pageFlip${flipDir === 1 ? "Forward" : "Backward"} 0.7s cubic-bezier(0.645,0.045,0.355,1.000) forwards`,
-                borderRadius:    flipDir === 1 ? "0 1.5rem 1.5rem 0" : "1.5rem 0 0 1.5rem",
-              }}
-            >
-              {/* Front face — the page that lifts */}
-              <div className="absolute inset-0 paper-texture p-6 md:p-8" style={{ backfaceVisibility: "hidden", borderRadius: "inherit" }}>
-                <PageContent
-                  page={flipDir === 1 ? cur.rightPage : cur.leftPage}
-                  pageNum={flipDir === 1 ? current * 2 + 2 : current * 2 + 1}
-                  corner={flipDir === 1 ? "tr" : "tl"}
-                />
+          {/* ── Back layer: right page ── */}
+          <div
+            className="flex-1 paper-texture p-6 md:p-8 rounded-r-3xl overflow-hidden"
+            style={backRightImage ? spreadBg(backRightImage, "right") : {}}
+          >
+            <PageText
+              page={flipping ? backSpread.right.rightPage : cur.rightPage}
+              pageNum={backRightNum}
+              corner="tr"
+            />
+          </div>
+
+          {/* ── Flipping page ── */}
+          {flipping && (() => {
+            const frontSpread = cur;
+            const backSpreadData = nxt;
+            const frontSide: "left" | "right" = flipDir === 1 ? "right" : "left";
+            const backSide:  "left" | "right" = flipDir === 1 ? "left"  : "right";
+            const frontImg = frontSpread.spreadImage;
+            const backImg  = backSpreadData.spreadImage;
+
+            return (
+              <div
+                className="absolute top-0 bottom-0 z-30 overflow-hidden"
+                style={{
+                  left:            flipDir === 1 ? "50%" : "0",
+                  right:           flipDir === 1 ? "0"   : "50%",
+                  transformOrigin: flipDir === 1 ? "left center" : "right center",
+                  transformStyle:  "preserve-3d",
+                  animation:       `pageFlip${flipDir === 1 ? "Forward" : "Backward"} 0.7s cubic-bezier(0.645,0.045,0.355,1.000) forwards`,
+                  borderRadius:    flipDir === 1 ? "0 1.5rem 1.5rem 0" : "1.5rem 0 0 1.5rem",
+                }}
+              >
+                {/* Front face */}
+                <div
+                  className="absolute inset-0 paper-texture p-6 md:p-8"
+                  style={{
+                    backfaceVisibility: "hidden",
+                    borderRadius: "inherit",
+                    ...(frontImg ? spreadBg(frontImg, frontSide) : {}),
+                  }}
+                >
+                  <PageText
+                    page={flipDir === 1 ? cur.rightPage : cur.leftPage}
+                    pageNum={flipDir === 1 ? current * 2 + 2 : current * 2 + 1}
+                    corner={flipDir === 1 ? "tr" : "tl"}
+                  />
+                </div>
+                {/* Back face */}
+                <div
+                  className="absolute inset-0 paper-texture p-6 md:p-8"
+                  style={{
+                    backfaceVisibility: "hidden",
+                    transform: "rotateY(180deg)",
+                    borderRadius: "inherit",
+                    // mirrorForBackFace=true: back face DOM is mirrored, so use 100% pos to show left half visually
+                    ...(backImg ? spreadBg(backImg, backSide, true) : {}),
+                  }}
+                >
+                  <PageText
+                    page={flipDir === 1 ? nxt.leftPage : nxt.rightPage}
+                    pageNum={flipDir === 1 ? next * 2 + 1 : next * 2 + 2}
+                    corner={flipDir === 1 ? "tl" : "tr"}
+                  />
+                </div>
               </div>
-              {/* Back face — revealed as it curls over */}
-              <div className="absolute inset-0 paper-texture p-6 md:p-8" style={{ backfaceVisibility: "hidden", transform: "rotateY(180deg)", borderRadius: "inherit" }}>
-                <PageContent
-                  page={flipDir === 1 ? nxt.leftPage : nxt.rightPage}
-                  pageNum={flipDir === 1 ? next * 2 + 1 : next * 2 + 2}
-                  corner={flipDir === 1 ? "tl" : "tr"}
-                />
-              </div>
-            </div>
-          )}
+            );
+          })()}
         </div>
       </div>
 

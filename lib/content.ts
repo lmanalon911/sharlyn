@@ -1,5 +1,7 @@
 export interface StorybookSpread {
   id: number;
+  // When spreadImage is set, one photo spans both pages as a continuous spread
+  spreadImage?: string;
   leftPage: {
     type: "image" | "text";
     imageUrl?: string;
