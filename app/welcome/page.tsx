@@ -1,13 +1,60 @@
 "use client";
 
+import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import ParticleField from "@/components/ParticleField";
 import AuthGuard from "@/components/AuthGuard";
 
 const CUTOUT_URL = "https://ayvgxtdwylgpsjkpiulc.supabase.co/storage/v1/object/public/Media/ChatGPT%20Image%20Jun%2024,%202026,%2009_33_52%20PM.png";
 
+const dialogues = {
+  left: "We should have been travelling right now or having a fancy celebration. I promise we'll do that very soon! For now, here's a little gift. 💕",
+  right: "We love you, Mommy. 🥰",
+};
+
+function SpeechBubble({ text, side }: { text: string; side: "left" | "right" }) {
+  return (
+    <AnimatePresence>
+      <motion.div
+        initial={{ opacity: 0, y: 10, scale: 0.9 }}
+        animate={{ opacity: 1, y: 0, scale: 1 }}
+        exit={{ opacity: 0, y: 10, scale: 0.9 }}
+        transition={{ duration: 0.25 }}
+        className="absolute z-20 w-52 rounded-2xl px-4 py-3 shadow-lg text-sm font-body leading-snug"
+        style={{
+          background: "rgba(255,255,255,0.92)",
+          color: "#5C3D2E",
+          border: "1.5px solid #F7C5CC",
+          bottom: "calc(100% + 14px)",
+          left: side === "left" ? "50%" : "auto",
+          right: side === "right" ? "50%" : "auto",
+          transform: side === "left" ? "translateX(-30%)" : "translateX(30%)",
+        }}
+      >
+        {text}
+        {/* Tail */}
+        <span
+          style={{
+            position: "absolute",
+            bottom: -9,
+            left: side === "left" ? "28%" : "auto",
+            right: side === "right" ? "28%" : "auto",
+            width: 0,
+            height: 0,
+            borderLeft: "9px solid transparent",
+            borderRight: "9px solid transparent",
+            borderTop: "9px solid rgba(255,255,255,0.92)",
+          }}
+        />
+      </motion.div>
+    </AnimatePresence>
+  );
+}
+
 function Character({ label, delay, side }: { label: string; delay: number; side: "left" | "right" }) {
+  const [hovered, setHovered] = useState(false);
+
   return (
     <motion.div
       initial={{ opacity: 0, x: side === "left" ? -80 : 80, y: 20 }}
@@ -18,8 +65,12 @@ function Character({ label, delay, side }: { label: string; delay: number; side:
       <motion.div
         animate={{ y: [0, -8, 0] }}
         transition={{ repeat: Infinity, duration: 3, ease: "easeInOut", delay: delay * 0.5 }}
-        className="relative"
+        className="relative cursor-pointer"
+        onMouseEnter={() => setHovered(true)}
+        onMouseLeave={() => setHovered(false)}
       >
+        {hovered && <SpeechBubble text={dialogues[side]} side={side} />}
+
         <div
           className="w-40 h-56 md:w-52 md:h-72 overflow-hidden relative"
           style={{ background: "transparent" }}
@@ -33,7 +84,6 @@ function Character({ label, delay, side }: { label: string; delay: number; side:
               height: "100%",
               width: "auto",
               maxWidth: "none",
-              // Daddy is left half, Sofiel is right half of the image
               left: side === "left" ? "0%" : "auto",
               right: side === "right" ? "0%" : "auto",
               objectFit: "cover",
