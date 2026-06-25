@@ -115,7 +115,7 @@ function WelcomeContent() {
           className="mt-4 px-10 py-4 rounded-full font-body font-semibold text-lg tracking-wide shadow-xl transition-all"
           style={{ background: "#B76E79", color: "#FFFDF9" }}
         >
-          Begin Our Story ✦
+          Continue ✦
         </motion.button>
 
         <motion.div
