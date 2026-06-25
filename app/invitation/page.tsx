@@ -36,16 +36,13 @@ function InvitationContent() {
         <motion.div
           animate={opening ? { scale: [1, 1.2, 0], opacity: [1, 1, 0] } : { y: [0, -10, 0] }}
           transition={opening ? { duration: 0.8 } : { repeat: Infinity, duration: 2.5, ease: "easeInOut" }}
-          className="mb-6"
+          className="mb-6 relative"
         >
-          <div
-            className="w-40 h-52 mx-auto rounded-3xl flex items-end justify-center shadow-2xl overflow-hidden"
-            style={{ background: "linear-gradient(160deg, #F7C5CC, #C9B8D8, #FFBE88)" }}
-          >
-            <div className="text-center pb-4">
-              <div className="text-6xl mb-1">👧</div>
-            </div>
-          </div>
+          <img
+            src="https://ayvgxtdwylgpsjkpiulc.supabase.co/storage/v1/object/public/Media/ChatGPT%20Image%20Jun%2025,%202026,%2001_55_10%20AM.png"
+            alt="Sofiel"
+            className="w-48 mx-auto drop-shadow-2xl"
+          />
           <motion.div
             className="absolute -top-1 left-1/2 -translate-x-1/2 text-2xl"
             animate={{ rotate: [-10, 10, -10], scale: [1, 1.3, 1] }}
@@ -85,7 +82,7 @@ function InvitationContent() {
           className="space-y-3"
         >
           <p className="font-body italic text-sm" style={{ color: "#5C3D2E99" }}>
-            There&apos;s a story waiting just for you, Mommy…
+            Daddy told me all about this story.
           </p>
 
           <motion.button
@@ -96,7 +93,7 @@ function InvitationContent() {
             className="w-full py-4 rounded-2xl font-body font-semibold text-lg shadow-xl transition-all"
             style={{ background: "#B76E79", color: "#FFFDF9" }}
           >
-            {opening ? "Opening the book… 📖✨" : "Open Our Story 📖"}
+            {opening ? "Opening the book… 📖✨" : "Read the Book 📖"}
           </motion.button>
         </motion.div>
       </motion.div>
