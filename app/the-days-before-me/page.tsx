@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import AuthGuard from "@/components/AuthGuard";
+import ParticleField from "@/components/ParticleField";
 import { storybookSpreads } from "@/lib/content";
 
 const TOTAL = storybookSpreads.length;
@@ -74,13 +75,8 @@ function StorybookContent() {
   const backRightN = (flipping && flipDir ===  1 ? next  : current) + 1;
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center px-4 py-10 relative overflow-hidden"
-      style={{ background: "linear-gradient(160deg, #F5EDD8, #EDE0C8)" }}>
-
-      {/* Ambient glow */}
-      <div className="absolute inset-0 pointer-events-none" style={{
-        background: "radial-gradient(ellipse 80% 50% at 50% 38%, rgba(247,197,204,0.22) 0%, transparent 70%)"
-      }} />
+    <div className="relative min-h-screen fairytale-bg flex flex-col items-center justify-center px-4 py-10 overflow-hidden">
+      <ParticleField count={40} />
 
       <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} className="text-center mb-10 relative z-10">
         <h1 className="font-display text-2xl md:text-4xl" style={{ color: "#8B3A52" }}>The Days Before Me</h1>
