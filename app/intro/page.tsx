@@ -108,19 +108,17 @@ function getIdx<T extends { t: number }>(track: T[], time: number): number {
   return idx;
 }
 
-// A single photo with slow Ken Burns — pure CSS, no framer state
+// A single photo with slow Ken Burns — uses contain so no faces get cropped
 function KenBurnsPhoto({ src, kenKey }: { src: string; kenKey: string }) {
   const anims = ["ken-zoom", "ken-left", "ken-right", "ken-zoom-out"];
   const anim = anims[Math.abs(kenKey.charCodeAt(0) + kenKey.charCodeAt(4)) % anims.length];
   return (
-    <div className="w-full h-full overflow-hidden rounded-2xl shadow-xl">
-      <div
-        className={`w-full h-full ${anim}`}
-        style={{
-          backgroundImage: `url(${src})`,
-          backgroundSize: "cover",
-          backgroundPosition: "center",
-        }}
+    <div className="w-full h-full overflow-hidden rounded-2xl shadow-xl flex items-center justify-center bg-black/20">
+      <img
+        src={src}
+        alt=""
+        className={`w-full h-full object-contain ${anim}`}
+        style={{ maxHeight: "100%", maxWidth: "100%" }}
       />
     </div>
   );
