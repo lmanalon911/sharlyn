@@ -27,24 +27,25 @@ function SpeechBubble({ text, side }: { text: string; side: "left" | "right" }) 
           color: "#5C3D2E",
           border: "1.5px solid #F7C5CC",
           top: "20%",
-          left: side === "left" ? "calc(100% + 14px)" : "auto",
-          right: side === "right" ? "calc(100% + 14px)" : "auto",
+          // Daddy (left) bubble goes to outer left, Sofiel (right) bubble goes to outer right
+          right: side === "left" ? "calc(100% + 14px)" : "auto",
+          left: side === "right" ? "calc(100% + 14px)" : "auto",
         }}
       >
         {text}
-        {/* Tail pointing toward the character */}
+        {/* Tail pointing inward toward the character */}
         <span
           style={{
             position: "absolute",
             top: 16,
-            left: side === "left" ? -9 : "auto",
-            right: side === "right" ? -9 : "auto",
+            right: side === "left" ? -9 : "auto",
+            left: side === "right" ? -9 : "auto",
             width: 0,
             height: 0,
             borderTop: "9px solid transparent",
             borderBottom: "9px solid transparent",
-            borderRight: side === "left" ? "9px solid rgba(255,255,255,0.92)" : "none",
-            borderLeft: side === "right" ? "9px solid rgba(255,255,255,0.92)" : "none",
+            borderLeft: side === "left" ? "9px solid rgba(255,255,255,0.92)" : "none",
+            borderRight: side === "right" ? "9px solid rgba(255,255,255,0.92)" : "none",
           }}
         />
       </motion.div>
