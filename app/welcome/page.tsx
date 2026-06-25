@@ -107,10 +107,25 @@ function Character({ label, delay, side }: { label: string; delay: number; side:
 
 function WelcomeContent() {
   const router = useRouter();
+  const [leaving, setLeaving] = useState(false);
+
+  const handleContinue = () => {
+    setLeaving(true);
+    setTimeout(() => router.push("/more-like-you"), 700);
+  };
 
   return (
     <div className="relative min-h-screen fairytale-bg flex flex-col items-center justify-center overflow-hidden">
       <ParticleField count={60} />
+
+      {/* Page-leave fade overlay */}
+      <motion.div
+        className="absolute inset-0 z-50 pointer-events-none"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: leaving ? 1 : 0 }}
+        transition={{ duration: 0.7, ease: "easeInOut" }}
+        style={{ background: "#FFFDF9" }}
+      />
 
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[300px] rounded-full opacity-30 blur-3xl" style={{ background: "#F7C5CC" }} />
       <div className="absolute bottom-0 left-0 w-[250px] h-[250px] rounded-full opacity-20 blur-3xl" style={{ background: "#C9B8D8" }} />
@@ -162,7 +177,7 @@ function WelcomeContent() {
           transition={{ delay: 1.2 }}
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
-          onClick={() => router.push("/more-like-you")}
+          onClick={handleContinue}
           className="mt-4 px-10 py-4 rounded-full font-body font-semibold text-lg tracking-wide shadow-xl transition-all"
           style={{ background: "#B76E79", color: "#FFFDF9" }}
         >

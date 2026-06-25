@@ -163,7 +163,12 @@ function IntroContent() {
   const progress  = duration ? (currentTime / duration) * 100 : 0;
 
   return (
-    <div className="relative w-full h-screen overflow-hidden bg-black flex flex-col">
+    <motion.div
+      className="relative w-full h-screen overflow-hidden bg-black flex flex-col"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.8, ease: "easeInOut" }}
+    >
       <audio
         ref={audioRef}
         src={AUDIO_URL}
@@ -297,7 +302,7 @@ function IntroContent() {
           </motion.div>
         )}
       </AnimatePresence>
-    </div>
+    </motion.div>
   );
 }
 
