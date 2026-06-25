@@ -9,16 +9,20 @@ import AuthGuard from "@/components/AuthGuard";
 function InvitationContent() {
   const router = useRouter();
   const [opening, setOpening] = useState(false);
+  const [leaving, setLeaving] = useState(false);
 
   const handleOpen = () => {
     setOpening(true);
-    setTimeout(() => {
-      router.push("/the-days-before-me");
-    }, 1200);
+    setTimeout(() => setLeaving(true), 400);
+    setTimeout(() => router.push("/the-days-before-me"), 1100);
   };
 
   return (
-    <div className="relative min-h-screen fairytale-bg flex items-center justify-center overflow-hidden">
+    <motion.div className="relative min-h-screen fairytale-bg flex items-center justify-center overflow-hidden"
+      initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.8 }}>
+      <motion.div className="absolute inset-0 z-50 pointer-events-none"
+        initial={{ opacity: 0 }} animate={{ opacity: leaving ? 1 : 0 }} transition={{ duration: 0.7 }}
+        style={{ background: "#FFFDF9" }} />
       <ParticleField count={55} />
 
       <div className="absolute inset-0 pointer-events-none">
@@ -97,7 +101,7 @@ function InvitationContent() {
           </motion.button>
         </motion.div>
       </motion.div>
-    </div>
+    </motion.div>
   );
 }
 

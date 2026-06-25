@@ -53,6 +53,7 @@ function StorybookContent() {
   const [flipping, setFlipping] = useState(false);
   const [flipDir, setFlipDir] = useState<1 | -1>(1);
   const [next, setNext] = useState(0);
+  const [leaving, setLeaving] = useState(false);
 
   const isLast = current === TOTAL - 1;
 
@@ -77,6 +78,9 @@ function StorybookContent() {
   return (
     <div className="relative min-h-screen fairytale-bg flex flex-col items-center justify-center px-4 py-10 overflow-hidden">
       <ParticleField count={40} />
+      <motion.div className="absolute inset-0 z-50 pointer-events-none"
+        initial={{ opacity: 0 }} animate={{ opacity: leaving ? 1 : 0 }} transition={{ duration: 0.7 }}
+        style={{ background: "#FFFDF9" }} />
 
       <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} className="text-center mb-10 relative z-10">
         <h1 className="font-display text-2xl md:text-4xl" style={{ color: "#8B3A52" }}>The Days Before Me</h1>
@@ -199,7 +203,7 @@ function StorybookContent() {
         </div>
 
         <motion.button whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }}
-          onClick={() => { if (isLast) router.push("/surprise"); else turn(1); }}
+          onClick={() => { if (isLast) { setLeaving(true); setTimeout(() => router.push("/surprise"), 700); } else turn(1); }}
           disabled={flipping}
           className="w-12 h-12 rounded-full flex items-center justify-center shadow-lg font-body font-bold text-lg disabled:opacity-30 transition-all"
           style={{ background: isLast ? "#B76E79" : "#F7C5CC", color: isLast ? "#FFFDF9" : "#8B3A52" }}>

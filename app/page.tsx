@@ -21,15 +21,15 @@ export default function PasswordPage() {
   const [error, setError] = useState("");
   const [shake, setShake] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [leaving, setLeaving] = useState(false);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (password === PASSWORD) {
       setLoading(true);
       document.cookie = "tdbm_auth=true; path=/; max-age=86400";
-      setTimeout(() => {
-        router.push("/welcome");
-      }, 800);
+      setTimeout(() => { setLeaving(true); }, 200);
+      setTimeout(() => { router.push("/welcome"); }, 900);
     } else {
       const msg = errorMessages[Math.floor(Math.random() * errorMessages.length)];
       setError(msg);
@@ -40,7 +40,11 @@ export default function PasswordPage() {
   };
 
   return (
-    <div className="relative min-h-screen fairytale-bg flex items-center justify-center overflow-hidden">
+    <motion.div className="relative min-h-screen fairytale-bg flex items-center justify-center overflow-hidden"
+      initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.8 }}>
+      <motion.div className="absolute inset-0 z-50 pointer-events-none"
+        initial={{ opacity: 0 }} animate={{ opacity: leaving ? 1 : 0 }} transition={{ duration: 0.7 }}
+        style={{ background: "#FFFDF9" }} />
       <ParticleField count={50} />
 
       <div className="absolute top-[-100px] right-[-100px] w-[400px] h-[400px] rounded-full bg-blush opacity-20 blur-3xl" />
@@ -126,6 +130,6 @@ export default function PasswordPage() {
           Made with love by Lemuel & Sofiel 💕
         </p>
       </motion.div>
-    </div>
+    </motion.div>
   );
 }

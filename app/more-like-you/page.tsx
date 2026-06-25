@@ -131,6 +131,12 @@ function IntroContent() {
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
   const [started, setStarted] = useState(false);
+  const [leaving, setLeaving] = useState(false);
+
+  const navigateNext = useCallback(() => {
+    setLeaving(true);
+    setTimeout(() => router.push("/book"), 700);
+  }, [router]);
 
   const sceneIdx = getIdx(scenes, currentTime);
   const lyricIdx = getIdx(lyrics, currentTime);
@@ -164,17 +170,20 @@ function IntroContent() {
 
   return (
     <motion.div
-      className="relative w-full h-screen overflow-hidden bg-black flex flex-col"
+      className="relative w-full h-screen overflow-hidden fairytale-bg flex flex-col"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.8, ease: "easeInOut" }}
     >
+      <motion.div className="absolute inset-0 z-50 pointer-events-none"
+        initial={{ opacity: 0 }} animate={{ opacity: leaving ? 1 : 0 }} transition={{ duration: 0.7 }}
+        style={{ background: "#FFFDF9" }} />
       <audio
         ref={audioRef}
         src={AUDIO_URL}
         onTimeUpdate={(e) => setCurrentTime(e.currentTarget.currentTime)}
         onLoadedMetadata={(e) => setDuration(e.currentTarget.duration)}
-        onEnded={() => { setIsPlaying(false); setTimeout(() => router.push("/book"), 2500); }}
+        onEnded={() => { setIsPlaying(false); setTimeout(() => navigateNext(), 2500); }}
       />
 
       {/* Song title */}
@@ -185,7 +194,7 @@ function IntroContent() {
       {/* Skip */}
       <motion.button
         initial={{ opacity: 0 }} animate={{ opacity: 0.4 }} whileHover={{ opacity: 1 }}
-        onClick={() => router.push("/book")}
+        onClick={() => navigateNext()}
         className="absolute top-4 right-5 z-20 text-white text-sm font-body"
       >
         Skip →
