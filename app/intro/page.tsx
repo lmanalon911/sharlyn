@@ -252,13 +252,19 @@ function IntroContent() {
         <div className="max-w-lg mx-auto flex flex-col gap-3">
           <div className="flex items-center gap-3">
             <span className="text-white/40 text-xs font-body w-10 text-right tabular-nums">{fmt(currentTime)}</span>
-            <div className="relative flex-1 h-1 rounded-full bg-white/20 cursor-pointer">
-              <input type="range" min={0} max={duration || 100} step={0.1} value={currentTime}
-                onChange={handleSeek} className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10" />
-              <div className="h-full rounded-full" style={{ width: `${progress}%`, background: "#B76E79" }} />
-              <div className="absolute top-1/2 -translate-y-1/2 w-3 h-3 rounded-full bg-white shadow pointer-events-none"
-                style={{ left: `calc(${progress}% - 6px)` }} />
-            </div>
+            <input
+              type="range"
+              min={0}
+              max={duration || 100}
+              step={0.1}
+              value={currentTime}
+              onChange={handleSeek}
+              className="flex-1 h-1 cursor-pointer rounded-full outline-none appearance-none"
+              style={{
+                background: `linear-gradient(to right, #B76E79 ${progress}%, rgba(255,255,255,0.2) ${progress}%)`,
+                accentColor: "#B76E79",
+              }}
+            />
             <span className="text-white/40 text-xs font-body w-10 tabular-nums">{fmt(duration)}</span>
           </div>
           <div className="flex justify-center">
