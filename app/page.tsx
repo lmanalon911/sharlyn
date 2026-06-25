@@ -122,7 +122,7 @@ export default function PasswordPage() {
           </form>
         </div>
 
-        <p className="text-center text-xs mt-6 font-body" style={{ color: "#F7C5CC80" }}>
+        <p className="text-center text-xs mt-6 font-body" style={{ color: "#B76E7960" }}>
           Made with love by Lemuel & Sofiel 💕
         </p>
       </motion.div>
