@@ -73,15 +73,15 @@ function Character({ label, delay, side, imageUrl, flip }: { label: string; dela
       >
         {hovered && <SpeechBubble text={dialogues[side]} side={side} />}
 
-        <div className="w-40 h-56 md:w-52 md:h-72 overflow-hidden relative" style={{ background: "transparent" }}>
+        <div style={{ width: 160, height: 240, background: "transparent", display: "flex", alignItems: "flex-end", justifyContent: "center" }}>
           <img
             src={imageUrl}
             alt={label}
             style={{
-              width: "100%",
-              height: "100%",
-              objectFit: "cover",
-              objectPosition: "top center",
+              maxWidth: "100%",
+              maxHeight: "100%",
+              objectFit: "contain",
+              objectPosition: "bottom center",
               transform: flip ? "scaleX(-1)" : "none",
             }}
           />
