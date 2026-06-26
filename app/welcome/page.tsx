@@ -73,7 +73,7 @@ function Character({ label, delay, side, imageUrl, flip, height = 240 }: { label
       >
         {hovered && <SpeechBubble text={dialogues[side]} side={side} />}
 
-        <div style={{ width: 160, height, background: "transparent", display: "flex", alignItems: "flex-end", justifyContent: "center" }}>
+        <div style={{ width: 200, height, background: "transparent", display: "flex", alignItems: "flex-end", justifyContent: "center" }}>
           <img
             src={imageUrl}
             alt={label}
@@ -145,7 +145,7 @@ function WelcomeContent() {
         </motion.div>
 
         <div className="flex items-end gap-4 md:gap-12 mt-4">
-          <Character label="Sofiel" delay={0.4} side="left" imageUrl={DADDY_URL} flip />
+          <Character label="Sofiel" delay={0.4} side="left" imageUrl={DADDY_URL} flip height={320} />
 
           <motion.div
             initial={{ opacity: 0, scale: 0 }}
@@ -162,7 +162,7 @@ function WelcomeContent() {
             </motion.div>
           </motion.div>
 
-          <Character label="Daddy" delay={0.6} side="right" imageUrl={SOFIEL_URL} height={320} />
+          <Character label="Daddy" delay={0.6} side="right" imageUrl={SOFIEL_URL} height={460} />
         </div>
 
         <motion.button
