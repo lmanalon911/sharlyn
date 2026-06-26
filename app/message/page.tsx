@@ -45,11 +45,12 @@ function MessageContent() {
           transition={{ duration: 0.7, type: "spring" }}
           className="relative mx-auto w-52 h-52 mb-8"
         >
-          <div
-            className="w-full h-full rounded-full flex items-center justify-center shadow-2xl overflow-hidden"
-            style={{ background: "linear-gradient(135deg, #FFBE88, #F7C5CC)" }}
-          >
-            <span className="text-8xl">👨</span>
+          <div className="w-full h-full rounded-full shadow-2xl overflow-hidden">
+            <img
+              src="https://ayvgxtdwylgpsjkpiulc.supabase.co/storage/v1/object/public/Media/ChatGPT%20Image%20Jun%2025,%202026,%2009_29_28%20PM.png"
+              alt="Daddy"
+              style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "top center" }}
+            />
           </div>
           {[0, 1, 2, 3, 4, 5].map((i) => (
             <motion.div
