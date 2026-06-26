@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import AuthGuard from "@/components/AuthGuard";
@@ -8,6 +8,28 @@ import ParticleField from "@/components/ParticleField";
 import { storybookSpreads } from "@/lib/content";
 
 const TOTAL = storybookSpreads.length;
+
+const BG_MUSIC_URL =
+  "https://ayvgxtdwylgpsjkpiulc.supabase.co/storage/v1/object/public/Media/videoplayback.weba";
+
+// Add narration URLs here once you have them (one per spread, index 0 = spread 1)
+const NARRATION_URLS: string[] = [
+  "", // spread 1
+  "", // spread 2
+  "", // spread 3
+  "", // spread 4
+  "", // spread 5
+  "", // spread 6
+  "", // spread 7
+  "", // spread 8
+  "", // spread 9
+  "", // spread 10
+  "", // spread 11
+  "", // spread 12
+  "", // spread 13
+  "", // spread 14
+  "", // spread 15
+];
 
 function halfBg(url: string, side: "left" | "right", mirrorCompensate = false): React.CSSProperties {
   const pos = mirrorCompensate
@@ -47,23 +69,96 @@ function GutterShadow({ side }: { side: "left" | "right" }) {
 const COVER = "linear-gradient(to bottom, #5c3318 0%, #3b2010 40%, #2a1508 100%)";
 const PAGE_EDGES = "repeating-linear-gradient(to bottom, #f0e4ca 0px, #f0e4ca 2px, #d4c09a 2px, #d4c09a 3.5px)";
 
+function VolumeIcon({ muted }: { muted: boolean }) {
+  return muted ? (
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+      <path d="M11 5L6 9H2v6h4l5 4V5z" /><line x1="23" y1="9" x2="17" y2="15" /><line x1="17" y1="9" x2="23" y2="15" />
+    </svg>
+  ) : (
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+      <path d="M11 5L6 9H2v6h4l5 4V5z" /><path d="M15.54 8.46a5 5 0 0 1 0 7.07" /><path d="M19.07 4.93a10 10 0 0 1 0 14.14" />
+    </svg>
+  );
+}
+
 function StorybookContent() {
   const router = useRouter();
-  // Preload all spread images on mount so flips never wait for network
-  useEffect(() => {
-    storybookSpreads.forEach((s) => {
-      if (s.spreadImage) {
-        const img = new Image();
-        img.src = s.spreadImage;
-      }
-    });
-  }, []);
 
+  // Page state
   const [current, setCurrent] = useState(0);
   const [flipping, setFlipping] = useState(false);
   const [flipDir, setFlipDir] = useState<1 | -1>(1);
   const [next, setNext] = useState(0);
   const [leaving, setLeaving] = useState(false);
+
+  // Audio state
+  const [bgOn, setBgOn] = useState(true);
+  const [bgVol, setBgVol] = useState(0.4);
+  const [narrationOn, setNarrationOn] = useState(true);
+  const [narrationVol, setNarrationVol] = useState(0.9);
+  const [showPlayBtn, setShowPlayBtn] = useState(true); // page 1 manual trigger
+
+  const bgRef = useRef<HTMLAudioElement | null>(null);
+  const narRef = useRef<HTMLAudioElement | null>(null);
+
+  // Init background music
+  useEffect(() => {
+    const audio = new Audio(BG_MUSIC_URL);
+    audio.loop = true;
+    audio.volume = bgVol;
+    bgRef.current = audio;
+    if (bgOn) audio.play().catch(() => {});
+    return () => { audio.pause(); audio.src = ""; };
+  }, []);
+
+  // BG music on/off
+  useEffect(() => {
+    if (!bgRef.current) return;
+    if (bgOn) bgRef.current.play().catch(() => {});
+    else bgRef.current.pause();
+  }, [bgOn]);
+
+  // BG volume
+  useEffect(() => {
+    if (bgRef.current) bgRef.current.volume = bgVol;
+  }, [bgVol]);
+
+  // Narration volume
+  useEffect(() => {
+    if (narRef.current) narRef.current.volume = narrationVol;
+  }, [narrationVol]);
+
+  const playNarration = useCallback((index: number) => {
+    const url = NARRATION_URLS[index];
+    if (!url) return;
+    if (narRef.current) { narRef.current.pause(); narRef.current.src = ""; }
+    const audio = new Audio(url);
+    audio.volume = narrationVol;
+    narRef.current = audio;
+    audio.play().catch(() => {});
+  }, [narrationVol]);
+
+  const stopNarration = useCallback(() => {
+    if (narRef.current) { narRef.current.pause(); narRef.current.src = ""; narRef.current = null; }
+  }, []);
+
+  // Narration on/off toggle
+  useEffect(() => {
+    if (narrationOn) {
+      // On page 1, only play if user already clicked the play button
+      if (current === 0 && showPlayBtn) return;
+      playNarration(current);
+    } else {
+      stopNarration();
+    }
+  }, [narrationOn]);
+
+  // Preload images
+  useEffect(() => {
+    storybookSpreads.forEach((s) => {
+      if (s.spreadImage) { const img = new Image(); img.src = s.spreadImage; }
+    });
+  }, []);
 
   const isLast = current === TOTAL - 1;
 
@@ -74,7 +169,12 @@ function StorybookContent() {
     setFlipDir(dir);
     setNext(n);
     setFlipping(true);
-    setTimeout(() => { setCurrent(n); setFlipping(false); }, 700);
+    setTimeout(() => {
+      setCurrent(n);
+      setFlipping(false);
+      setShowPlayBtn(false); // after first flip, manual btn gone
+      if (narrationOn) playNarration(n);
+    }, 700);
   };
 
   const cur = storybookSpreads[current];
@@ -107,21 +207,17 @@ function StorybookContent() {
           filter: "blur(10px)", zIndex: 0,
         }} />
 
-        {/* Book body — flex row: left-binding | pages | right-binding */}
         <div className="flex items-stretch relative" style={{
           zIndex: 1,
           filter: "drop-shadow(0 24px 48px rgba(0,0,0,0.45)) drop-shadow(0 8px 16px rgba(0,0,0,0.3))",
         }}>
-
-          {/* ── Left binding ── */}
+          {/* Left binding */}
           <div className="flex-none flex items-stretch" style={{ width: 26 }}>
-            {/* Page-edge texture */}
             <div style={{ width: 12, background: PAGE_EDGES, alignSelf: "stretch" }} />
-            {/* Hard cover */}
             <div style={{ width: 14, background: COVER, borderRadius: "6px 0 0 6px", boxShadow: "inset -3px 0 6px rgba(0,0,0,0.4), 2px 0 4px rgba(0,0,0,0.2)" }} />
           </div>
 
-          {/* ── Pages area ── */}
+          {/* Pages area */}
           <div className="perspective-2000 flex-1" style={{ minHeight: 560 }}>
             <div className="relative w-full h-full flex" style={{ minHeight: 560 }}>
 
@@ -141,6 +237,20 @@ function StorybookContent() {
               }}>
                 {!backRightSpread.spreadImage && <Placeholder n={backRightN} />}
                 <GutterShadow side="right" />
+
+                {/* Page 1 narration play button */}
+                {current === 0 && showPlayBtn && !flipping && (
+                  <motion.button
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ delay: 0.8 }}
+                    onClick={() => { setShowPlayBtn(false); if (narrationOn) playNarration(0); }}
+                    className="absolute bottom-4 right-4 z-30 flex items-center gap-1.5 px-3 py-1.5 rounded-full font-body text-xs font-semibold shadow-lg"
+                    style={{ background: "rgba(183,110,121,0.9)", color: "#FFFDF9" }}
+                  >
+                    ▶ Play Narration
+                  </motion.button>
+                )}
               </div>
 
               {/* Spine */}
@@ -158,7 +268,6 @@ function StorybookContent() {
                   transformStyle:  "preserve-3d",
                   animation:       `pageFlip${flipDir === 1 ? "Forward" : "Backward"} 0.7s cubic-bezier(0.645,0.045,0.355,1.000) forwards`,
                 }}>
-                  {/* Front face */}
                   <div className="absolute inset-0" style={{
                     backfaceVisibility: "hidden",
                     background: "#f5edd8",
@@ -167,14 +276,10 @@ function StorybookContent() {
                     {!cur.spreadImage && <Placeholder n={current + 1} />}
                     <GutterShadow side={flipDir === 1 ? "right" : "left"} />
                   </div>
-
-                  {/* Curl shadow sweep */}
                   <div className="absolute inset-0 pointer-events-none z-10" style={{
                     backfaceVisibility: "hidden",
                     animation: `pageFlipShadow${flipDir === 1 ? "Forward" : "Backward"} 0.7s cubic-bezier(0.645,0.045,0.355,1.000) forwards`,
                   }} />
-
-                  {/* Back face */}
                   <div className="absolute inset-0" style={{
                     backfaceVisibility: "hidden",
                     transform: "rotateY(180deg)",
@@ -188,11 +293,9 @@ function StorybookContent() {
             </div>
           </div>
 
-          {/* ── Right binding ── */}
+          {/* Right binding */}
           <div className="flex-none flex items-stretch" style={{ width: 26 }}>
-            {/* Hard cover */}
             <div style={{ width: 14, background: COVER, borderRadius: "0 6px 6px 0", boxShadow: "inset 3px 0 6px rgba(0,0,0,0.4), -2px 0 4px rgba(0,0,0,0.2)" }} />
-            {/* Page-edge texture */}
             <div style={{ width: 12, background: PAGE_EDGES, alignSelf: "stretch" }} />
           </div>
         </div>
@@ -227,6 +330,7 @@ function StorybookContent() {
         </motion.p>
       )}
 
+      {/* Skip button */}
       <motion.button
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
@@ -239,6 +343,53 @@ function StorybookContent() {
       >
         Skip
       </motion.button>
+
+      {/* Audio Controls Panel */}
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 1 }}
+        className="fixed bottom-6 left-4 z-40 rounded-2xl px-4 py-3 shadow-xl flex flex-col gap-3"
+        style={{ background: "rgba(253,246,236,0.95)", border: "1px solid #F7C5CC", minWidth: 200 }}
+      >
+        {/* Background Music row */}
+        <div className="flex items-center gap-2">
+          <button
+            onClick={() => setBgOn(v => !v)}
+            className="flex-none w-7 h-7 rounded-full flex items-center justify-center transition-all"
+            style={{ background: bgOn ? "#B76E79" : "#F7C5CC", color: bgOn ? "#FFFDF9" : "#8B3A52" }}
+          >
+            <VolumeIcon muted={!bgOn} />
+          </button>
+          <span className="font-body text-xs" style={{ color: "#5C3D2E", minWidth: 56 }}>BG Music</span>
+          <input
+            type="range" min={0} max={1} step={0.01} value={bgVol}
+            onChange={e => setBgVol(Number(e.target.value))}
+            disabled={!bgOn}
+            className="flex-1 h-1 rounded-full accent-rose-400 disabled:opacity-30"
+            style={{ accentColor: "#B76E79" }}
+          />
+        </div>
+
+        {/* Narration row */}
+        <div className="flex items-center gap-2">
+          <button
+            onClick={() => setNarrationOn(v => !v)}
+            className="flex-none w-7 h-7 rounded-full flex items-center justify-center transition-all"
+            style={{ background: narrationOn ? "#B76E79" : "#F7C5CC", color: narrationOn ? "#FFFDF9" : "#8B3A52" }}
+          >
+            <VolumeIcon muted={!narrationOn} />
+          </button>
+          <span className="font-body text-xs" style={{ color: "#5C3D2E", minWidth: 56 }}>Narration</span>
+          <input
+            type="range" min={0} max={1} step={0.01} value={narrationVol}
+            onChange={e => setNarrationVol(Number(e.target.value))}
+            disabled={!narrationOn}
+            className="flex-1 h-1 rounded-full disabled:opacity-30"
+            style={{ accentColor: "#B76E79" }}
+          />
+        </div>
+      </motion.div>
     </div>
   );
 }
