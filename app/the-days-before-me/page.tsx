@@ -87,6 +87,8 @@ function StorybookContent() {
   const narRef = useRef<HTMLAudioElement | null>(null);
   const narCtxRef = useRef<AudioContext | null>(null);
   const narGainRef = useRef<GainNode | null>(null);
+  const currentRef = useRef(0);
+  const narrationOnRef = useRef(true);
 
   // Init background music — only plays after user interaction (started)
   useEffect(() => {
@@ -119,6 +121,8 @@ function StorybookContent() {
     if (narGainRef.current) narGainRef.current.gain.value = narrationVol;
   }, [narrationVol]);
 
+  const turnRef = useRef<(dir: 1 | -1) => void>(() => {});
+
   const playNarration = useCallback((index: number) => {
     const url = NARRATION_URLS[index];
     if (!url) return;
@@ -138,6 +142,13 @@ function StorybookContent() {
     gain.connect(ctx.destination);
     narCtxRef.current = ctx;
     narGainRef.current = gain;
+
+    // Auto-flip to next page when narration ends
+    audio.onended = () => {
+      if (narrationOnRef.current && currentRef.current < TOTAL - 1) {
+        turnRef.current(1);
+      }
+    };
 
     audio.play().catch(() => {});
   }, [narrationVol]);
@@ -167,6 +178,10 @@ function StorybookContent() {
 
   const isLast = current === TOTAL - 1;
 
+  // Keep refs in sync for use inside audio callbacks
+  useEffect(() => { currentRef.current = current; }, [current]);
+  useEffect(() => { narrationOnRef.current = narrationOn; }, [narrationOn]);
+
   const turn = (dir: 1 | -1) => {
     if (flipping) return;
     const n = current + dir;
@@ -176,11 +191,15 @@ function StorybookContent() {
     setFlipping(true);
     setTimeout(() => {
       setCurrent(n);
+      currentRef.current = n;
       setFlipping(false);
-      setShowPlayBtn(false); // after first flip, manual btn gone
-      if (narrationOn) playNarration(n);
+      setShowPlayBtn(false);
+      if (narrationOnRef.current) playNarration(n);
     }, 700);
   };
+
+  // Keep turnRef current so playNarration's onended always calls the latest turn
+  useEffect(() => { turnRef.current = turn; });
 
   const cur = storybookSpreads[current];
   const nxt = storybookSpreads[next] ?? cur;
