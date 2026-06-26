@@ -67,8 +67,6 @@ function VolumeIcon({ muted }: { muted: boolean }) {
 
 function StorybookContent() {
   const router = useRouter();
-  const [started, setStarted] = useState(false);
-
   // Page state
   const [current, setCurrent] = useState(0);
   const [flipping, setFlipping] = useState(false);
@@ -90,19 +88,15 @@ function StorybookContent() {
   const currentRef = useRef(0);
   const narrationOnRef = useRef(true);
 
-  // Init background music — only plays after user interaction (started)
+  // Init background music — attempt autoplay immediately (prior page click satisfies browser policy)
   useEffect(() => {
     const audio = new Audio(BG_MUSIC_URL);
     audio.loop = true;
     audio.volume = bgVol;
     bgRef.current = audio;
+    if (bgOn) audio.play().catch(() => {});
     return () => { audio.pause(); audio.src = ""; };
   }, []);
-
-  useEffect(() => {
-    if (!started || !bgRef.current) return;
-    if (bgOn) bgRef.current.play().catch(() => {});
-  }, [started]);
 
   // BG music on/off
   useEffect(() => {
@@ -371,49 +365,6 @@ function StorybookContent() {
       >
         Skip
       </motion.button>
-
-      {/* Tap to begin overlay */}
-      {!started && (
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          className="fixed inset-0 z-50 flex items-center justify-center"
-          style={{ background: "rgba(253,246,236,0.92)" }}
-        >
-          <div className="flex flex-col items-center gap-6 text-center px-8">
-            <motion.p
-              initial={{ opacity: 0, y: -10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.3 }}
-              className="font-display text-3xl md:text-4xl"
-              style={{ color: "#8B3A52" }}
-            >
-              The Days Before Me
-            </motion.p>
-            <motion.p
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.7 }}
-              className="font-body text-base"
-              style={{ color: "#5C3D2E99" }}
-            >
-              as told by Sofiel
-            </motion.p>
-            <motion.button
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 1.1 }}
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              onClick={() => setStarted(true)}
-              className="px-10 py-4 rounded-full font-body font-semibold text-lg shadow-xl"
-              style={{ background: "#B76E79", color: "#FFFDF9" }}
-            >
-              Open the Book
-            </motion.button>
-          </div>
-        </motion.div>
-      )}
 
       {/* Audio Controls Panel */}
       <motion.div
