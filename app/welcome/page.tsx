@@ -6,11 +6,11 @@ import { motion, AnimatePresence } from "framer-motion";
 import ParticleField from "@/components/ParticleField";
 import AuthGuard from "@/components/AuthGuard";
 
-const CUTOUT_URL = "https://ayvgxtdwylgpsjkpiulc.supabase.co/storage/v1/object/public/Media/ChatGPT%20Image%20Jun%2024,%202026,%2009_33_52%20PM.png";
+const CUTOUT_URL = "https://ayvgxtdwylgpsjkpiulc.supabase.co/storage/v1/object/public/Media/ChatGPT%20Image%20Jun%2025,%202026,%2009_16_12%20PM.png";
 
 const dialogues = {
-  left: "We should have been travelling right now or having a fancy celebration. I promise we'll do that very soon! For now, here's a little gift. 💕",
-  right: "We love you, Mommy. 🥰",
+  left: "We love you, Mommy. 🥰",
+  right: "We should have been travelling right now or having a fancy celebration. I promise we'll do that very soon! For now, here's a little gift. 💕",
 };
 
 function SpeechBubble({ text, side }: { text: string; side: "left" | "right" }) {
