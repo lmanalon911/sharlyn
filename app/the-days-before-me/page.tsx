@@ -80,7 +80,7 @@ function StorybookContent() {
   const [bgOn, setBgOn] = useState(true);
   const [bgVol, setBgVol] = useState(0.4);
   const [narrationOn, setNarrationOn] = useState(true);
-  const [narrationVol, setNarrationVol] = useState(2.0); // >1 uses GainNode boost
+  const [narrationVol, setNarrationVol] = useState(4.0); // >1 uses GainNode boost
   const [showPlayBtn, setShowPlayBtn] = useState(true); // page 1 manual trigger
 
   const bgRef = useRef<HTMLAudioElement | null>(null);
@@ -453,7 +453,7 @@ function StorybookContent() {
           </button>
           <span className="font-body text-xs" style={{ color: "#5C3D2E", minWidth: 56 }}>Narration</span>
           <input
-            type="range" min={0} max={2} step={0.05} value={narrationVol}
+            type="range" min={0} max={4} step={0.1} value={narrationVol}
             onChange={e => setNarrationVol(Number(e.target.value))}
             disabled={!narrationOn}
             className="flex-1 h-1 rounded-full disabled:opacity-30"
