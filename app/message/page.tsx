@@ -5,7 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import ParticleField from "@/components/ParticleField";
 import AuthGuard from "@/components/AuthGuard";
 
-const VIDEO_ID = "1l38rECiCjjVZPYnCZCDTrxyGXvQBbt17";
+const VIDEO_ID = "mFQSITrZ18E";
 const PASSWORD = "simsimbibilabidabs04";
 
 function MessageContent() {
@@ -163,7 +163,7 @@ function MessageContent() {
                 </p>
                 <div className="rounded-2xl overflow-hidden shadow-xl" style={{ aspectRatio: "16/9" }}>
                   <iframe
-                    src={`https://drive.google.com/file/d/${VIDEO_ID}/preview`}
+                    src={`https://www.youtube.com/embed/${VIDEO_ID}?autoplay=1&rel=0`}
                     width="100%"
                     height="100%"
                     allow="autoplay"
@@ -202,7 +202,7 @@ function MessageContent() {
               </p>
               <div className="rounded-2xl overflow-hidden shadow-2xl" style={{ aspectRatio: "16/9" }}>
                 <iframe
-                  src={`https://drive.google.com/file/d/${VIDEO_ID}/preview`}
+                  src={`https://www.youtube.com/embed/${VIDEO_ID}?autoplay=1&rel=0`}
                   width="100%"
                   height="100%"
                   allow="autoplay"
