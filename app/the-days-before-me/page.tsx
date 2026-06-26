@@ -130,7 +130,22 @@ function StorybookContent() {
     if (narCtxRef.current) { narCtxRef.current.close(); }
 
     const audio = new Audio(url);
+    audio.crossOrigin = "anonymous";
     narRef.current = audio;
+
+    // Boost volume beyond 1.0 using GainNode
+    const ctx = new AudioContext();
+    const gain = ctx.createGain();
+    gain.gain.value = narrationVol;
+    audio.addEventListener("canplay", () => {
+      try {
+        const src = ctx.createMediaElementSource(audio);
+        src.connect(gain);
+        gain.connect(ctx.destination);
+      } catch {}
+    }, { once: true });
+    narCtxRef.current = ctx;
+    narGainRef.current = gain;
 
     // Auto-flip to next page when narration ends
     audio.onended = () => {
@@ -139,7 +154,6 @@ function StorybookContent() {
       }
     };
 
-    audio.volume = Math.min(narrationVol, 1);
     audio.play().catch(() => {});
   }, [narrationVol]);
 
@@ -439,7 +453,7 @@ function StorybookContent() {
           </button>
           <span className="font-body text-xs" style={{ color: "#5C3D2E", minWidth: 56 }}>Narration</span>
           <input
-            type="range" min={0} max={3} step={0.05} value={narrationVol}
+            type="range" min={0} max={2} step={0.05} value={narrationVol}
             onChange={e => setNarrationVol(Number(e.target.value))}
             disabled={!narrationOn}
             className="flex-1 h-1 rounded-full disabled:opacity-30"
