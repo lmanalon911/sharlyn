@@ -406,8 +406,8 @@ function StorybookContent() {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 1 }}
-        className="fixed bottom-6 z-40 rounded-2xl px-4 py-3 shadow-xl flex flex-col gap-3"
-        style={{ left: "max(1rem, calc(50vw - 500px))", background: "rgba(253,246,236,0.95)", border: "1px solid #F7C5CC", minWidth: 200 }}
+        className="fixed bottom-6 left-4 z-40 rounded-2xl px-4 py-3 shadow-xl flex flex-col gap-3"
+        style={{ background: "rgba(253,246,236,0.95)", border: "1px solid #F7C5CC", minWidth: 200 }}
       >
         {/* Background Music row */}
         <div className="flex items-center gap-2">
