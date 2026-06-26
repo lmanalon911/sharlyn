@@ -9,7 +9,7 @@ const VIDEO_ID = "1l38rECiCjjVZPYnCZCDTrxyGXvQBbt17";
 const PASSWORD = "simsimbibilabidabs04";
 
 function MessageContent() {
-  const [stage, setStage] = useState<"idle" | "password" | "video">("idle");
+  const [stage, setStage] = useState<"idle" | "password" | "video" | "expanded">("idle");
   const [input, setInput] = useState("");
   const [error, setError] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -171,11 +171,60 @@ function MessageContent() {
                     style={{ border: "none", display: "block" }}
                   />
                 </div>
+                <motion.button
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  onClick={() => setStage("expanded")}
+                  className="mt-4 px-6 py-2 rounded-full font-body font-semibold shadow-lg text-sm"
+                  style={{ background: "#B76E79", color: "#FFFDF9" }}
+                >
+                  Expand
+                </motion.button>
               </motion.div>
             )}
           </AnimatePresence>
         </motion.div>
       </motion.div>
+
+      {/* Expanded video overlay */}
+      <AnimatePresence>
+        {stage === "expanded" && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-50 flex flex-col items-center justify-center"
+            style={{ background: "rgba(253,246,236,0.97)" }}
+          >
+            <div className="w-[70vw] max-w-4xl">
+              <p className="font-display text-xl text-center mb-4" style={{ color: "#8B3A52" }}>
+                A message for your eyes and ears only 💕
+              </p>
+              <div className="rounded-2xl overflow-hidden shadow-2xl" style={{ aspectRatio: "16/9" }}>
+                <iframe
+                  src={`https://drive.google.com/file/d/${VIDEO_ID}/preview`}
+                  width="100%"
+                  height="100%"
+                  allow="autoplay"
+                  allowFullScreen
+                  style={{ border: "none", display: "block" }}
+                />
+              </div>
+              <div className="text-center mt-4">
+                <motion.button
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  onClick={() => setStage("video")}
+                  className="px-6 py-2 rounded-full font-body font-semibold shadow-lg text-sm"
+                  style={{ background: "#C9B8D8", color: "#FFFDF9" }}
+                >
+                  Collapse
+                </motion.button>
+              </div>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }
