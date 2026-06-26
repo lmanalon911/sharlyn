@@ -67,6 +67,7 @@ function VolumeIcon({ muted }: { muted: boolean }) {
 
 function StorybookContent() {
   const router = useRouter();
+  const [started, setStarted] = useState(false);
 
   // Page state
   const [current, setCurrent] = useState(0);
@@ -85,15 +86,19 @@ function StorybookContent() {
   const bgRef = useRef<HTMLAudioElement | null>(null);
   const narRef = useRef<HTMLAudioElement | null>(null);
 
-  // Init background music
+  // Init background music — only plays after user interaction (started)
   useEffect(() => {
     const audio = new Audio(BG_MUSIC_URL);
     audio.loop = true;
     audio.volume = bgVol;
     bgRef.current = audio;
-    if (bgOn) audio.play().catch(() => {});
     return () => { audio.pause(); audio.src = ""; };
   }, []);
+
+  useEffect(() => {
+    if (!started || !bgRef.current) return;
+    if (bgOn) bgRef.current.play().catch(() => {});
+  }, [started]);
 
   // BG music on/off
   useEffect(() => {
@@ -327,6 +332,28 @@ function StorybookContent() {
       >
         Skip
       </motion.button>
+
+      {/* Tap to begin overlay */}
+      {!started && (
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          className="fixed inset-0 z-50 flex items-center justify-center"
+          style={{ background: "rgba(253,246,236,0.92)" }}
+        >
+          <motion.button
+            animate={{ scale: [1, 1.05, 1] }}
+            transition={{ repeat: Infinity, duration: 2 }}
+            onClick={() => setStarted(true)}
+            className="flex flex-col items-center gap-3 px-10 py-6 rounded-3xl shadow-xl font-body"
+            style={{ background: "#B76E79", color: "#FFFDF9" }}
+          >
+            <span className="text-3xl">♪</span>
+            <span className="text-lg font-semibold">Tap to Begin</span>
+            <span className="text-xs opacity-75">Music will play automatically</span>
+          </motion.button>
+        </motion.div>
+      )}
 
       {/* Audio Controls Panel */}
       <motion.div
