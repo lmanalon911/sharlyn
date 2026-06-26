@@ -226,6 +226,19 @@ function StorybookContent() {
           The end… or is it? 🌸
         </motion.p>
       )}
+
+      <motion.button
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 1 }}
+        whileHover={{ scale: 1.05 }}
+        whileTap={{ scale: 0.95 }}
+        onClick={() => { setLeaving(true); setTimeout(() => router.push("/message"), 700); }}
+        className="absolute top-4 right-4 px-4 py-1.5 rounded-full font-body text-sm shadow-md"
+        style={{ background: "rgba(253,246,236,0.85)", color: "#B76E79", border: "1px solid #F7C5CC" }}
+      >
+        Skip
+      </motion.button>
     </div>
   );
 }
