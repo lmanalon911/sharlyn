@@ -63,7 +63,7 @@ function MessageContent() {
               }}
               transition={{ repeat: Infinity, duration: 6, delay: i * 0.5 }}
             >
-              ✨
+              *
             </motion.div>
           ))}
         </motion.div>
@@ -97,7 +97,7 @@ function MessageContent() {
                   className="px-8 py-3 rounded-full font-body font-semibold shadow-lg"
                   style={{ background: "#B76E79", color: "#FFFDF9" }}
                 >
-                  What is it?! 👀
+                  What is it?!
                 </motion.button>
               </motion.div>
             )}
@@ -111,7 +111,7 @@ function MessageContent() {
                 className="mt-6"
               >
                 <p className="font-body text-base mb-4" style={{ color: "#5C3D2E" }}>
-                  You know the password… 🔒
+                  You know the password…
                 </p>
                 <input
                   ref={inputRef}
@@ -135,7 +135,7 @@ function MessageContent() {
                     className="font-body text-sm mb-3"
                     style={{ color: "#B76E79" }}
                   >
-                    Hmm, try again… 🤔
+                    Come on, you got this!
                   </motion.p>
                 )}
                 <motion.button
@@ -145,7 +145,7 @@ function MessageContent() {
                   className="px-8 py-3 rounded-full font-body font-semibold shadow-lg"
                   style={{ background: "#B76E79", color: "#FFFDF9" }}
                 >
-                  Open 💕
+                  Open
                 </motion.button>
               </motion.div>
             )}
@@ -159,7 +159,7 @@ function MessageContent() {
                 className="mt-6"
               >
                 <p className="font-display text-xl mb-4" style={{ color: "#8B3A52" }}>
-                  A message, just for you 💌
+                  A message for your eyes and ears only 💕
                 </p>
                 <div className="rounded-2xl overflow-hidden shadow-xl" style={{ aspectRatio: "16/9" }}>
                   <iframe
