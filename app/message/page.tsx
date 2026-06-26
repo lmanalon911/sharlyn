@@ -43,15 +43,14 @@ function MessageContent() {
           initial={{ scale: 0.8, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
           transition={{ duration: 0.7, type: "spring" }}
-          className="relative mx-auto w-52 h-52 mb-8"
+          className="relative mx-auto mb-4"
+          style={{ width: 220 }}
         >
-          <div className="w-full h-full rounded-full shadow-2xl overflow-hidden">
-            <img
-              src="https://ayvgxtdwylgpsjkpiulc.supabase.co/storage/v1/object/public/Media/ChatGPT%20Image%20Jun%2025,%202026,%2009_29_28%20PM.png"
-              alt="Daddy"
-              style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "top center" }}
-            />
-          </div>
+          <img
+            src="https://ayvgxtdwylgpsjkpiulc.supabase.co/storage/v1/object/public/Media/ChatGPT%20Image%20Jun%2025,%202026,%2009_29_28%20PM.png"
+            alt="Daddy"
+            style={{ width: "100%", height: "auto", display: "block" }}
+          />
           {[0, 1, 2, 3, 4, 5].map((i) => (
             <motion.div
               key={i}
