@@ -54,7 +54,7 @@ function SpeechBubble({ text, side }: { text: string; side: "left" | "right" }) 
   );
 }
 
-function Character({ label, delay, side, imageUrl, flip, height = 240 }: { label: string; delay: number; side: "left" | "right"; imageUrl: string; flip?: boolean; height?: number }) {
+function Character({ label, delay, side, imageUrl, flip, width = 180 }: { label: string; delay: number; side: "left" | "right"; imageUrl: string; flip?: boolean; width?: number }) {
   const [hovered, setHovered] = useState(false);
 
   return (
@@ -73,13 +73,13 @@ function Character({ label, delay, side, imageUrl, flip, height = 240 }: { label
       >
         {hovered && <SpeechBubble text={dialogues[side]} side={side} />}
 
-        <div style={{ background: "transparent", display: "flex", alignItems: "flex-end", justifyContent: "center" }}>
+        <div style={{ background: "transparent" }}>
           <img
             src={imageUrl}
             alt={label}
             style={{
-              height: `${height}px`,
-              width: "auto",
+              width: `${width}px`,
+              height: "auto",
               display: "block",
               transform: flip ? "scaleX(-1)" : "none",
             }}
@@ -144,7 +144,7 @@ function WelcomeContent() {
         </motion.div>
 
         <div className="flex items-end gap-4 md:gap-12 mt-4">
-          <Character label="Sofiel" delay={0.4} side="left" imageUrl={DADDY_URL} flip height={320} />
+          <Character label="Sofiel" delay={0.4} side="left" imageUrl={DADDY_URL} flip width={180} />
 
           <motion.div
             initial={{ opacity: 0, scale: 0 }}
@@ -161,7 +161,7 @@ function WelcomeContent() {
             </motion.div>
           </motion.div>
 
-          <Character label="Daddy" delay={0.6} side="right" imageUrl={SOFIEL_URL} height={460} />
+          <Character label="Daddy" delay={0.6} side="right" imageUrl={SOFIEL_URL} width={260} />
         </div>
 
         <motion.button
