@@ -6,7 +6,8 @@ import { motion, AnimatePresence } from "framer-motion";
 import ParticleField from "@/components/ParticleField";
 import AuthGuard from "@/components/AuthGuard";
 
-const CUTOUT_URL = "https://ayvgxtdwylgpsjkpiulc.supabase.co/storage/v1/object/public/Media/ChatGPT%20Image%20Jun%2025,%202026,%2009_16_12%20PM.png";
+const DADDY_URL = "https://ayvgxtdwylgpsjkpiulc.supabase.co/storage/v1/object/public/Media/ChatGPT%20Image%20Jun%2025,%202026,%2009_25_44%20PM.png";
+const SOFIEL_URL = "https://ayvgxtdwylgpsjkpiulc.supabase.co/storage/v1/object/public/Media/ChatGPT%20Image%20Jun%2025,%202026,%2009_16_12%20PM.png";
 
 const dialogues = {
   left: "We love you, Mommy. 🥰",
@@ -53,7 +54,7 @@ function SpeechBubble({ text, side }: { text: string; side: "left" | "right" }) 
   );
 }
 
-function Character({ label, delay, side }: { label: string; delay: number; side: "left" | "right" }) {
+function Character({ label, delay, side, imageUrl, flip }: { label: string; delay: number; side: "left" | "right"; imageUrl: string; flip?: boolean }) {
   const [hovered, setHovered] = useState(false);
 
   return (
@@ -72,23 +73,16 @@ function Character({ label, delay, side }: { label: string; delay: number; side:
       >
         {hovered && <SpeechBubble text={dialogues[side]} side={side} />}
 
-        <div
-          className="w-40 h-56 md:w-52 md:h-72 overflow-hidden relative"
-          style={{ background: "transparent" }}
-        >
+        <div className="w-40 h-56 md:w-52 md:h-72 overflow-hidden relative" style={{ background: "transparent" }}>
           <img
-            src={CUTOUT_URL}
+            src={imageUrl}
             alt={label}
             style={{
-              position: "absolute",
-              top: 0,
+              width: "100%",
               height: "100%",
-              width: "auto",
-              maxWidth: "none",
-              left: side === "left" ? "0%" : "auto",
-              right: side === "right" ? "0%" : "auto",
               objectFit: "cover",
-              objectPosition: side === "left" ? "left center" : "right center",
+              objectPosition: "top center",
+              transform: flip ? "scaleX(-1)" : "none",
             }}
           />
         </div>
@@ -151,7 +145,7 @@ function WelcomeContent() {
         </motion.div>
 
         <div className="flex items-end gap-4 md:gap-12 mt-4">
-          <Character label="Daddy" delay={0.4} side="left" />
+          <Character label="Daddy" delay={0.4} side="left" imageUrl={DADDY_URL} flip />
 
           <motion.div
             initial={{ opacity: 0, scale: 0 }}
@@ -168,7 +162,7 @@ function WelcomeContent() {
             </motion.div>
           </motion.div>
 
-          <Character label="Sofiel" delay={0.6} side="right" />
+          <Character label="Sofiel" delay={0.6} side="right" imageUrl={SOFIEL_URL} />
         </div>
 
         <motion.button
