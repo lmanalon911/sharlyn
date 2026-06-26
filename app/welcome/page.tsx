@@ -73,15 +73,14 @@ function Character({ label, delay, side, imageUrl, flip, height = 240 }: { label
       >
         {hovered && <SpeechBubble text={dialogues[side]} side={side} />}
 
-        <div style={{ width: 200, height, background: "transparent", display: "flex", alignItems: "flex-end", justifyContent: "center" }}>
+        <div style={{ background: "transparent", display: "flex", alignItems: "flex-end", justifyContent: "center" }}>
           <img
             src={imageUrl}
             alt={label}
             style={{
-              maxWidth: "100%",
-              maxHeight: "100%",
-              objectFit: "contain",
-              objectPosition: "bottom center",
+              height: `${height}px`,
+              width: "auto",
+              display: "block",
               transform: flip ? "scaleX(-1)" : "none",
             }}
           />
