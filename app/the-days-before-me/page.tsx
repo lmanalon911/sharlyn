@@ -130,18 +130,7 @@ function StorybookContent() {
     if (narCtxRef.current) { narCtxRef.current.close(); }
 
     const audio = new Audio(url);
-    audio.crossOrigin = "anonymous";
     narRef.current = audio;
-
-    // Use Web Audio API GainNode to allow volume > 1.0
-    const ctx = new AudioContext();
-    const gain = ctx.createGain();
-    gain.gain.value = narrationVol;
-    const src = ctx.createMediaElementSource(audio);
-    src.connect(gain);
-    gain.connect(ctx.destination);
-    narCtxRef.current = ctx;
-    narGainRef.current = gain;
 
     // Auto-flip to next page when narration ends
     audio.onended = () => {
@@ -150,6 +139,7 @@ function StorybookContent() {
       }
     };
 
+    audio.volume = Math.min(narrationVol, 1);
     audio.play().catch(() => {});
   }, [narrationVol]);
 
