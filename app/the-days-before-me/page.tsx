@@ -384,7 +384,7 @@ function StorybookContent() {
               className="font-display text-3xl md:text-4xl"
               style={{ color: "#8B3A52" }}
             >
-              Once upon a time…
+              The Days Before Me
             </motion.p>
             <motion.p
               initial={{ opacity: 0 }}
