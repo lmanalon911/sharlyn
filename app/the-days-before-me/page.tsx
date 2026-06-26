@@ -213,7 +213,7 @@ function StorybookContent() {
         </div>
 
         <motion.button whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }}
-          onClick={() => { if (isLast) { setLeaving(true); setTimeout(() => router.push("/surprise"), 700); } else turn(1); }}
+          onClick={() => { if (isLast) { setLeaving(true); setTimeout(() => router.push("/message"), 700); } else turn(1); }}
           disabled={flipping}
           className="w-12 h-12 rounded-full flex items-center justify-center shadow-lg font-body font-bold text-lg disabled:opacity-30 transition-all"
           style={{ background: isLast ? "#B76E79" : "#F7C5CC", color: isLast ? "#FFFDF9" : "#8B3A52" }}>
