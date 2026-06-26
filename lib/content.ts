@@ -43,5 +43,7 @@ const BASE = "https://ayvgxtdwylgpsjkpiulc.supabase.co/storage/v1/object/public/
 
 export const storybookSpreads: StorybookSpread[] = Array.from({ length: 15 }, (_, i) => ({
   id: i + 1,
-  spreadImage: `${BASE}/${i + 1}.png`,
+  spreadImage: i === 13
+    ? `${BASE}/14%20(1).png`
+    : `${BASE}/${i + 1}.png`,
 }));
