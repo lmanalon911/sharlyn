@@ -32,8 +32,8 @@ File: `.env.local` — **gitignored, never commit**
 
 ```
 NEXT_PUBLIC_SUPABASE_URL=https://ayvgxtdwylgpsjkpiulc.supabase.co
-NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY=sb_publishable_xImUW29DgB88qDjelJJ6-A_7IIWL4R_
-SUPABASE_SECRET_KEY=sb_secret_Y7fyOI_33mipOKSdUtsmbA_VQDVJ4CL
+NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY=<your publishable key from Supabase dashboard>
+SUPABASE_SECRET_KEY=<your secret key from Supabase dashboard — never share or commit>
 ```
 
 ---
