@@ -12,24 +12,8 @@ const TOTAL = storybookSpreads.length;
 const BG_MUSIC_URL =
   "https://ayvgxtdwylgpsjkpiulc.supabase.co/storage/v1/object/public/Media/videoplayback.weba";
 
-// Add narration URLs here once you have them (one per spread, index 0 = spread 1)
-const NARRATION_URLS: string[] = [
-  "", // spread 1
-  "", // spread 2
-  "", // spread 3
-  "", // spread 4
-  "", // spread 5
-  "", // spread 6
-  "", // spread 7
-  "", // spread 8
-  "", // spread 9
-  "", // spread 10
-  "", // spread 11
-  "", // spread 12
-  "", // spread 13
-  "", // spread 14
-  "", // spread 15
-];
+const NARRATION_BASE = "https://ayvgxtdwylgpsjkpiulc.supabase.co/storage/v1/object/public/Media";
+const NARRATION_URLS: string[] = Array.from({ length: 15 }, (_, i) => `${NARRATION_BASE}/${i + 1}.mp3`);
 
 function halfBg(url: string, side: "left" | "right", mirrorCompensate = false): React.CSSProperties {
   const pos = mirrorCompensate
