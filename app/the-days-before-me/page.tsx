@@ -80,11 +80,13 @@ function StorybookContent() {
   const [bgOn, setBgOn] = useState(true);
   const [bgVol, setBgVol] = useState(0.4);
   const [narrationOn, setNarrationOn] = useState(true);
-  const [narrationVol, setNarrationVol] = useState(0.9);
+  const [narrationVol, setNarrationVol] = useState(2.0); // >1 uses GainNode boost
   const [showPlayBtn, setShowPlayBtn] = useState(true); // page 1 manual trigger
 
   const bgRef = useRef<HTMLAudioElement | null>(null);
   const narRef = useRef<HTMLAudioElement | null>(null);
+  const narCtxRef = useRef<AudioContext | null>(null);
+  const narGainRef = useRef<GainNode | null>(null);
 
   // Init background music — only plays after user interaction (started)
   useEffect(() => {
@@ -112,23 +114,37 @@ function StorybookContent() {
     if (bgRef.current) bgRef.current.volume = bgVol;
   }, [bgVol]);
 
-  // Narration volume
+  // Narration gain
   useEffect(() => {
-    if (narRef.current) narRef.current.volume = narrationVol;
+    if (narGainRef.current) narGainRef.current.gain.value = narrationVol;
   }, [narrationVol]);
 
   const playNarration = useCallback((index: number) => {
     const url = NARRATION_URLS[index];
     if (!url) return;
     if (narRef.current) { narRef.current.pause(); narRef.current.src = ""; }
+    if (narCtxRef.current) { narCtxRef.current.close(); }
+
     const audio = new Audio(url);
-    audio.volume = narrationVol;
+    audio.crossOrigin = "anonymous";
     narRef.current = audio;
+
+    // Use Web Audio API GainNode to allow volume > 1.0
+    const ctx = new AudioContext();
+    const gain = ctx.createGain();
+    gain.gain.value = narrationVol;
+    const src = ctx.createMediaElementSource(audio);
+    src.connect(gain);
+    gain.connect(ctx.destination);
+    narCtxRef.current = ctx;
+    narGainRef.current = gain;
+
     audio.play().catch(() => {});
   }, [narrationVol]);
 
   const stopNarration = useCallback(() => {
     if (narRef.current) { narRef.current.pause(); narRef.current.src = ""; narRef.current = null; }
+    if (narCtxRef.current) { narCtxRef.current.close(); narCtxRef.current = null; }
   }, []);
 
   // Narration on/off toggle
@@ -414,7 +430,7 @@ function StorybookContent() {
           </button>
           <span className="font-body text-xs" style={{ color: "#5C3D2E", minWidth: 56 }}>Narration</span>
           <input
-            type="range" min={0} max={1} step={0.01} value={narrationVol}
+            type="range" min={0} max={3} step={0.05} value={narrationVol}
             onChange={e => setNarrationVol(Number(e.target.value))}
             disabled={!narrationOn}
             className="flex-1 h-1 rounded-full disabled:opacity-30"
